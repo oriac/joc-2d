@@ -32,11 +32,10 @@ private:
 	cPlayer Player;
 	cShoot Shoot[100];
 	int shootCount;
-	bool Disparo;
+	bool Disparo[100];
 	cData Data;
 	int endTime;
 	int startTime;
 	int loopTime;
 	int endCd, startCd, shootCd;
-
 };

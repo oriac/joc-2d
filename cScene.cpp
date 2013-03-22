@@ -90,3 +90,7 @@ int* cScene::GetMap()
 void cScene::Scroll(int i) {
 	desplazament += i;
 }
+
+int cScene::getDesp() {
+	return desplazament;
+}

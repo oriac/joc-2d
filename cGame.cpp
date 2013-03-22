@@ -13,7 +13,7 @@ cGame::~cGame(void)
 bool cGame::Init()
 {
 	bool res=true;
-	Disparo = false;
+	//Disparo = false;
 	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
@@ -88,7 +88,9 @@ bool cGame::Process()
 	
 	if(keys[GLUT_KEY_UP]) {
 		Player.MoveUp(Scene.GetMap());
-		Scene.Scroll(2);
+		int x,y;
+		Player.GetPosition(&x,&y);
+		if(y-Scene.getDesp() > GAME_WIDTH/3 ) Scene.Scroll(2);
 	}
 	if(keys[GLUT_KEY_LEFT]) {
 		Player.MoveLeft(Scene.GetMap());
@@ -97,7 +99,9 @@ bool cGame::Process()
 	else if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
 	else if(keys[GLUT_KEY_DOWN]) {
 		Player.MoveDown(Scene.GetMap());
-		Scene.Scroll(-2);
+		int x,y;
+		Player.GetPosition(&x,&y);
+		if(y-Scene.getDesp() < GAME_WIDTH/5 ) Scene.Scroll(-2);
 	}
 	else if (keys[GLUT_KEY_F1])		{
 		
@@ -114,7 +118,7 @@ bool cGame::Process()
 			Shoot[shootCount].SetWidthHeight(32,32);
 			Shoot[shootCount].SetState(STATE_LOOKRIGHT);
 			shootCount = (shootCount+1)%100;
-			Disparo = true;
+			Disparo[shootCount] = true;
 		}
 		//Shoot.MoveLeft(Scene.GetMap());
 	}
@@ -126,7 +130,7 @@ bool cGame::Process()
 	if (Disparo) {
 		for(int i=0;i<100;i++) {
 			Shoot[i].MoveLeft(Scene.GetMap());
-			Disparo = !Shoot[i].CollidesWall(Scene.GetMap());
+			Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
 		}
 	}
 	return res;
@@ -141,11 +145,9 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
 	Player.Draw(Data.GetID(IMG_PLAYER));
-	if (Disparo){
 		for(int i=0;i<100;i++) {
-			Shoot[i].Draw(Data.GetID(IMG_BULLET));
+			if(Disparo[i])Shoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
-	}
 
 	glutSwapBuffers();
 }

@@ -23,7 +23,7 @@ public:
 	void Draw(int tex_id);
 	int *GetMap();
 	void Scroll(int i);
-
+	int getDesp();
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
 	int id_DL;								//actual level display list
