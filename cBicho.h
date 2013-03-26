@@ -40,7 +40,7 @@ public:
 
 	bool Collides(cRect *rc);
 	bool Collides2(cRect *rc);
-	bool cBicho::CollidesWall(int *map);
+	bool cBicho::CollidesWall(int *map, bool right);
 	bool CollidesMapWall(int *map,bool right);
 	bool CollidesMapTop(int *map);
 	bool CollidesMapFloor(int *map);

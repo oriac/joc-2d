@@ -65,7 +65,8 @@ void main(int argc, char** argv)
 	//Register callback functions
 	glutDisplayFunc(AppRender);			
 	glutKeyboardFunc(AppKeyboard);		
-	glutKeyboardUpFunc(AppKeyboardUp);	
+	glutKeyboardUpFunc(AppKeyboardUp);
+	//glutKeyboardLeftFunc(AppKeyboardLeft);
 	glutSpecialFunc(AppSpecialKeys);	
 	glutSpecialUpFunc(AppSpecialKeysUp);
 	glutMouseFunc(AppMouse);

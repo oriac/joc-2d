@@ -60,23 +60,38 @@ bool cBicho::Collides2(cRect *rc)
 	else return false;*/
 	return ((x>=rc->left) && (x+w<=rc->right) && (y>=rc->bottom) && (y+h<=rc->top));
 }
-bool cBicho::CollidesWall(int* map) 
+bool cBicho::CollidesWall(int* map, bool right) 
 {
 	int xaux;
 	
 	//Whats next tile?
 	if( (x % TILE_SIZE) == 0)
 	{
-		xaux = x;
-		x -= STEP_LENGTH;
+		if(right) {
 
-		if(CollidesMapWall(map,false))
-		{
+			xaux = x;
+			x += STEP_LENGTH;
+
+			if(CollidesMapWall(map,true))
+			{
+				x = xaux;
+				state = STATE_LOOKRIGHT;
+				return true;
+			}
 			x = xaux;
-			state = STATE_LOOKLEFT;
-			return true;
 		}
-		x = xaux;
+		else {
+			xaux = x;
+			x -= STEP_LENGTH;
+
+			if(CollidesMapWall(map,false))
+			{
+				x = xaux;
+				state = STATE_LOOKLEFT;
+				return true;
+			}
+			x = xaux;
+		}
 	}
 	//Advance, no problem
 	return false;

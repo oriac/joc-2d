@@ -140,7 +140,8 @@ bool cGame::Process()
 	Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
 		if (Disparo[i] == true) {
-			switch (Shoot[i].GetState()) {
+			int shootState = Shoot[i].GetState(); 
+			switch (shootState) {
 				case STATE_SHOOT_LEFT:
 					Shoot[i].MoveLeft(Scene.GetMap());
 					break;
@@ -161,8 +162,12 @@ bool cGame::Process()
 					break;
 			}
 			//Shoot[i].MoveLeft(Scene.GetMap());
+			if(shootState == STATE_SHOOT_RIGHT||shootState == STATE_WALKRIGHT||shootState == STATE_LOOKRIGHT)
+				Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),true);
+			else Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),false);
 			
-			Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
+			
+			//Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
 			cRect pos;
 			if(!collide)Enemy.GetArea(&pos);
 			if(Shoot[i].Collides2(&pos)) {
