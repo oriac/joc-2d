@@ -51,6 +51,7 @@ bool cGame::Init()
 	Player.SetSpeed(1);
 	Player.SetTile(4,1);
 	shootCount = 0;
+	startCd = -500;
 	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
 
@@ -138,8 +139,9 @@ bool cGame::Process()
 			Shoot[shootCount].SetWidthHeight(32,32);
 			Shoot[shootCount].SetState(Player.GetState());
 			Shoot[shootCount].SetSpeed(2);
-			shootCount = (shootCount+1)%100;
 			Disparo[shootCount] = true;
+			shootCount = (shootCount+1)%100;
+			
 		}
 		//Shoot.MoveLeft(Scene.GetMap());
 	}
@@ -181,18 +183,20 @@ bool cGame::Process()
 			if(shootState == STATE_SHOOT_RIGHT||shootState == STATE_WALKRIGHT||shootState == STATE_LOOKRIGHT)
 				Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),true);
 			else if(shootState == STATE_LOOKUP)
-				Disparo[i] = !Shoot[i].CollidesMapTop(Scene.GetMap());
+				Disparo[i] = !Shoot[i].CollidesTopBot(Scene.GetMap(),true);
 			else if(shootState == STATE_LOOKDOWN)
-				Disparo[i] = !Shoot[i].CollidesMapFloor(Scene.GetMap());
+				Disparo[i] = !Shoot[i].CollidesTopBot(Scene.GetMap(),false);
 			else Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),false);
 			
 			
 			//Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
 			cRect pos;
-			if(!collide)Enemy.GetArea(&pos);
-			if(Shoot[i].Collides2(&pos)) {
+			if(!collide) {
+				Enemy.GetArea(&pos);
+				if(Shoot[i].Collides2(&pos)) {
 					collide = true;
 					Disparo[i]=false;
+				}
 			}
 		}
 	}
@@ -212,12 +216,12 @@ void cGame::Render()
 	cRect pos2;
 	//collide = false;
 	Player.GetArea(&pos2);
-		for(int i=0;i<100;i++) {
-			if(Disparo[i]) {
-				Shoot[i].Draw(Data.GetID(IMG_BULLET));
-			}
-	
+	for(int i=0;i<100;i++) {
+		if(Disparo[i]) {
+			Shoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
+	
+	}
 
 	if (!collide) Enemy.Draw(Data.GetID(IMG_PLAYER));
 	glutSwapBuffers();
