@@ -220,12 +220,12 @@ void cBicho::MoveUp(int *map)
 	if( (y % TILE_SIZE) == 0)
 	{
 		yaux = y;
-		y += STEP_LENGTH;
+		y += STEP_LENGTH*speed;
 
 		if(CollidesMapTop(map))
 		{
 			y = yaux;
-			state = STATE_LOOKUP;
+			state = STATE_LOOKUP*speed;
 		}
 	}
 	//Advance, no problem
@@ -235,7 +235,7 @@ void cBicho::MoveUp(int *map)
 
 		if(state != STATE_LOOKUP)
 		{
-			state = STATE_LOOKUP;
+			state = STATE_LOOKUP*speed;
 			seq = 0;
 			delay = 0;
 		}
@@ -250,7 +250,7 @@ void cBicho::MoveDown(int *map)
 	if( (y % TILE_SIZE) == 0)
 	{
 		yaux = y;
-		y -= STEP_LENGTH;
+		y -= STEP_LENGTH*speed;
 
 		if(CollidesMapWall(map,false))
 		{
@@ -261,7 +261,7 @@ void cBicho::MoveDown(int *map)
 	//Advance, no problem
 	else
 	{
-		y -= STEP_LENGTH;
+		y -= STEP_LENGTH*speed;
 		if(state != STATE_LOOKDOWN)
 		{
 			state = STATE_LOOKDOWN;
@@ -280,7 +280,7 @@ void cBicho::MoveLeft(int *map)
 	if( (x % TILE_SIZE) == 0)
 	{
 		xaux = x;
-		x -= STEP_LENGTH;
+		x -= STEP_LENGTH*speed;
 
 		if(CollidesMapWall(map,false))
 		{
@@ -291,7 +291,7 @@ void cBicho::MoveLeft(int *map)
 	//Advance, no problem
 	else
 	{
-		x -= STEP_LENGTH;
+		x -= STEP_LENGTH*speed;
 		if(state != STATE_WALKLEFT)
 		{
 			state = STATE_WALKLEFT;
@@ -309,7 +309,7 @@ void cBicho::MoveRight(int *map)
 	if( (x % TILE_SIZE) == 0)
 	{
 		xaux = x;
-		x += STEP_LENGTH;
+		x += STEP_LENGTH*speed;
 
 		if(CollidesMapWall(map,true))
 		{
@@ -320,7 +320,7 @@ void cBicho::MoveRight(int *map)
 	//Advance, no problem
 	else
 	{
-		x += STEP_LENGTH;
+		x += STEP_LENGTH*speed;
 
 		if(state != STATE_WALKRIGHT)
 		{
@@ -338,6 +338,16 @@ void cBicho::Shoot(int *map)
 			seq = 0;
 			delay = 0;
 		}
+	else if(state == STATE_LOOKUP) {
+			state = STATE_LOOKUP;
+			seq = 0;
+			delay = 0;
+	}
+	else if(state == STATE_LOOKDOWN) {
+			state = STATE_LOOKDOWN;
+			seq = 0;
+			delay = 0;
+	}
 	else	{
 			state = STATE_SHOOT_RIGHT;
 			seq = 0;
@@ -417,4 +427,7 @@ int cBicho::GetState()
 void cBicho::SetState(int s)
 {
 	state = s;
+}
+void cBicho::SetSpeed(int i) {
+	speed = i;
 }

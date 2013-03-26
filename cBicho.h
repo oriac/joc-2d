@@ -61,6 +61,8 @@ public:
 
 	void NextFrame(int max);
 	int  GetFrame();
+
+	void SetSpeed(int i);
 	
 private:
 	int x,y;
@@ -70,6 +72,6 @@ private:
 	bool jumping;
 	int jump_alfa;
 	int jump_y;
-
+	int speed;
 	int seq,delay;
 };
