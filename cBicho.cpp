@@ -96,6 +96,42 @@ bool cBicho::CollidesWall(int* map, bool right)
 	//Advance, no problem
 	return false;
 }
+bool cBicho::CollidesTopBot(int *map, bool top) {
+	int yaux;
+	
+	//Whats next tile?
+	if( (x % TILE_SIZE) == 0)
+	{
+		if(top) {
+
+			yaux = y;
+			y += STEP_LENGTH*speed;
+
+			if(CollidesMapTop(map))
+			{
+				y = yaux;
+				state = STATE_LOOKUP;
+				return true;
+			}
+			y = yaux;
+		}
+		else {
+			yaux = y;
+			y -= STEP_LENGTH*speed;
+
+			if(CollidesMapFloor(map))
+			{
+				y = yaux;
+				state = STATE_LOOKDOWN;
+				return true;
+			}
+			y = yaux;
+		}
+	}
+	//Advance, no problem
+	return false;
+}
+
 bool cBicho::CollidesMapWall(int *map,bool right)
 {
 	int tile_x,tile_y;
@@ -108,6 +144,7 @@ bool cBicho::CollidesMapWall(int *map,bool right)
 	height_tiles = h / TILE_SIZE;
 
 	if(right)	tile_x += width_tiles;
+	if( (y % TILE_SIZE) != 0)height_tiles++;
 	
 	for(j=0;j<height_tiles;j++)
 	{
@@ -151,7 +188,7 @@ bool cBicho::CollidesMapTop(int *map) {
 	return on_base;
 }
 
-bool cBicho::CollidesMapFloor(int *map)
+/*bool cBicho::CollidesMapFloor(int *map)
 {
 	int tile_x,tile_y;
 	int width_tiles;
@@ -184,6 +221,26 @@ bool cBicho::CollidesMapFloor(int *map)
 		i++;
 	}
 	return on_base;
+}*/
+
+bool cBicho::CollidesMapFloor(int *map) {
+	int tile_x,tile_y;
+	int j;
+	int width_tiles,height_tiles;
+
+	tile_x = x / TILE_SIZE;
+	tile_y = y / TILE_SIZE;
+	width_tiles  = w / TILE_SIZE;
+	height_tiles = h / TILE_SIZE;
+
+	//if(top)	tile_y += height_tiles;
+	if( (x % TILE_SIZE) != 0) width_tiles++;
+	for(j=0;j<width_tiles;j++)
+	{
+		if(map[ tile_x+j + ((tile_y)*SCENE_WIDTH) ] != 0)	return true;
+	}
+	
+	return false;
 }
 
 void cBicho::GetArea(cRect *rc)
@@ -220,22 +277,22 @@ void cBicho::MoveUp(int *map)
 	if( (y % TILE_SIZE) == 0)
 	{
 		yaux = y;
-		y += STEP_LENGTH;
+		y += STEP_LENGTH*speed;
 
 		if(CollidesMapTop(map))
 		{
 			y = yaux;
-			state = STATE_LOOKUP;
+			state = STATE_LOOKUP*speed;
 		}
 	}
 	//Advance, no problem
 	else
 	{
-		y += STEP_LENGTH;
+		y += STEP_LENGTH*speed;
 
 		if(state != STATE_LOOKUP)
 		{
-			state = STATE_LOOKUP;
+			state = STATE_LOOKUP*speed;
 			seq = 0;
 			delay = 0;
 		}
@@ -250,9 +307,9 @@ void cBicho::MoveDown(int *map)
 	if( (y % TILE_SIZE) == 0)
 	{
 		yaux = y;
-		y -= STEP_LENGTH;
+		y -= STEP_LENGTH*speed;
 
-		if(CollidesMapWall(map,false))
+		if(CollidesMapFloor(map))
 		{
 			y = yaux;
 			state = STATE_LOOKDOWN;
@@ -261,7 +318,7 @@ void cBicho::MoveDown(int *map)
 	//Advance, no problem
 	else
 	{
-		y -= STEP_LENGTH;
+		y -= STEP_LENGTH*speed;
 		if(state != STATE_LOOKDOWN)
 		{
 			state = STATE_LOOKDOWN;
@@ -280,7 +337,7 @@ void cBicho::MoveLeft(int *map)
 	if( (x % TILE_SIZE) == 0)
 	{
 		xaux = x;
-		x -= STEP_LENGTH;
+		x -= STEP_LENGTH*speed;
 
 		if(CollidesMapWall(map,false))
 		{
@@ -291,7 +348,7 @@ void cBicho::MoveLeft(int *map)
 	//Advance, no problem
 	else
 	{
-		x -= STEP_LENGTH;
+		x -= STEP_LENGTH*speed;
 		if(state != STATE_WALKLEFT)
 		{
 			state = STATE_WALKLEFT;
@@ -309,7 +366,7 @@ void cBicho::MoveRight(int *map)
 	if( (x % TILE_SIZE) == 0)
 	{
 		xaux = x;
-		x += STEP_LENGTH;
+		x += STEP_LENGTH*speed;
 
 		if(CollidesMapWall(map,true))
 		{
@@ -320,7 +377,7 @@ void cBicho::MoveRight(int *map)
 	//Advance, no problem
 	else
 	{
-		x += STEP_LENGTH;
+		x += STEP_LENGTH*speed;
 
 		if(state != STATE_WALKRIGHT)
 		{
@@ -338,6 +395,16 @@ void cBicho::Shoot(int *map)
 			seq = 0;
 			delay = 0;
 		}
+	else if(state == STATE_LOOKUP) {
+			state = STATE_LOOKUP;
+			seq = 0;
+			delay = 0;
+	}
+	else if(state == STATE_LOOKDOWN) {
+			state = STATE_LOOKDOWN;
+			seq = 0;
+			delay = 0;
+	}
 	else	{
 			state = STATE_SHOOT_RIGHT;
 			seq = 0;
@@ -417,4 +484,7 @@ int cBicho::GetState()
 void cBicho::SetState(int s)
 {
 	state = s;
+}
+void cBicho::SetSpeed(int i) {
+	speed = i;
 }

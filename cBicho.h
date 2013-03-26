@@ -40,8 +40,9 @@ public:
 
 	bool Collides(cRect *rc);
 	bool Collides2(cRect *rc);
-	bool cBicho::CollidesWall(int *map, bool right);
+	bool CollidesWall(int *map, bool right);
 	bool CollidesMapWall(int *map,bool right);
+	bool CollidesTopBot(int *map,bool top);
 	bool CollidesMapTop(int *map);
 	bool CollidesMapFloor(int *map);
 	void GetArea(cRect *rc);
@@ -61,6 +62,8 @@ public:
 
 	void NextFrame(int max);
 	int  GetFrame();
+
+	void SetSpeed(int i);
 	
 private:
 	int x,y;
@@ -70,6 +73,6 @@ private:
 	bool jumping;
 	int jump_alfa;
 	int jump_y;
-
+	int speed;
 	int seq,delay;
 };
