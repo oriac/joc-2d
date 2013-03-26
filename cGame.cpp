@@ -13,6 +13,10 @@ cGame::~cGame(void)
 bool cGame::Init()
 {
 	bool res=true;
+	collide = false;
+	for (int i = 0; i < 100; ++i) {
+		Disparo[i] = false;
+	}
 	//Disparo = false;
 	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -30,6 +34,13 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
+
+	//Enemy initialization
+
+	if(!res) return false;
+	Enemy.SetWidthHeight(32,32);
+	Enemy.SetTile(4,1);
+
 
 	//Player initialization
 	res = Data.LoadImage(IMG_PLAYER,"bub.png",GL_RGBA);
@@ -116,7 +127,7 @@ bool cGame::Process()
 			Player.GetTile(&x,&y);
 			Shoot[shootCount].SetTile(x-1,y);
 			Shoot[shootCount].SetWidthHeight(32,32);
-			Shoot[shootCount].SetState(STATE_LOOKRIGHT);
+			Shoot[shootCount].SetState(Player.GetState());
 			shootCount = (shootCount+1)%100;
 			Disparo[shootCount] = true;
 		}
@@ -127,10 +138,37 @@ bool cGame::Process()
 	
 	//Game Logic
 	Player.Logic(Scene.GetMap());
-	if (Disparo) {
-		for(int i=0;i<100;i++) {
-			Shoot[i].MoveLeft(Scene.GetMap());
+	for(int i=0;i<100;i++) {
+		if (Disparo[i] == true) {
+			switch (Shoot[i].GetState()) {
+				case STATE_SHOOT_LEFT:
+					Shoot[i].MoveLeft(Scene.GetMap());
+					break;
+				case STATE_SHOOT_RIGHT:
+					Shoot[i].MoveRight(Scene.GetMap());
+					break;
+				case STATE_WALKLEFT:
+					Shoot[i].MoveLeft(Scene.GetMap());
+					break;
+				case STATE_WALKRIGHT:
+					Shoot[i].MoveRight(Scene.GetMap());
+					break;
+				case STATE_LOOKLEFT:
+					Shoot[i].MoveLeft(Scene.GetMap());
+					break;
+				case STATE_LOOKRIGHT:
+					Shoot[i].MoveRight(Scene.GetMap());
+					break;
+			}
+			//Shoot[i].MoveLeft(Scene.GetMap());
+			
 			Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
+			cRect pos;
+			if(!collide)Enemy.GetArea(&pos);
+			if(Shoot[i].Collides2(&pos)) {
+					collide = true;
+					Disparo[i]=false;
+			}
 		}
 	}
 	return res;
@@ -145,9 +183,17 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_BLOCKS));
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	
+	cRect pos2;
+	//collide = false;
+	Player.GetArea(&pos2);
 		for(int i=0;i<100;i++) {
-			if(Disparo[i])Shoot[i].Draw(Data.GetID(IMG_BULLET));
+			if(Disparo[i]) {
+				Shoot[i].Draw(Data.GetID(IMG_BULLET));
+			}
+	
 		}
 
+	if (!collide) Enemy.Draw(Data.GetID(IMG_PLAYER));
 	glutSwapBuffers();
 }

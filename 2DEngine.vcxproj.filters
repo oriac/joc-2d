@@ -26,13 +26,16 @@
     <ClCompile Include="cScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GLUTMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cShoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,6 +62,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cShoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include "cPlayer.h"
 #include "cShoot.h"
 #include "cData.h"
+#include "cEnemy.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -31,8 +32,10 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cShoot Shoot[100];
+	cEnemy Enemy;
 	int shootCount;
 	bool Disparo[100];
+	bool collide;
 	cData Data;
 	int endTime;
 	int startTime;

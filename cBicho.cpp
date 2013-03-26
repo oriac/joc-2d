@@ -52,6 +52,14 @@ bool cBicho::Collides(cRect *rc)
 {
 	return ((x>rc->left) && (x+w<rc->right) && (y>rc->bottom) && (y+h<rc->top));
 }
+
+bool cBicho::Collides2(cRect *rc)
+{
+	/*if (((x>=rc->left) && (x+w<=rc->left)) || ((x>=rc->right) && (x+w<=rc->right)) &&
+		((y>=rc->bottom) && (y+h<=rc->bottom)) || ((y>=rc->top) && (y+h<=rc->top))) return true;
+	else return false;*/
+	return ((x>=rc->left) && (x+w<=rc->right) && (y>=rc->bottom) && (y+h<=rc->top));
+}
 bool cBicho::CollidesWall(int* map) 
 {
 	int xaux;
@@ -309,9 +317,14 @@ void cBicho::MoveRight(int *map)
 }
 void cBicho::Shoot(int *map)
 {
-	if(state !=STATE_SHOOT_LEFT)
+	if(state == STATE_SHOOT_LEFT || state == STATE_WALKLEFT || state == STATE_LOOKLEFT)
 		{
 			state = STATE_SHOOT_LEFT;
+			seq = 0;
+			delay = 0;
+		}
+	else	{
+			state = STATE_SHOOT_RIGHT;
 			seq = 0;
 			delay = 0;
 		}

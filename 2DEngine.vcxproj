@@ -92,6 +92,7 @@
     <ClCompile Include="cScene.cpp" />
     <ClCompile Include="cShoot.cpp" />
     <ClCompile Include="cTexture.cpp" />
+    <ClCompile Include="cEnemy.cpp" />
     <ClCompile Include="GLUTMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cShoot.h" />
     <ClInclude Include="cTexture.h" />
+    <ClInclude Include="cEnemy.h" />
     <ClInclude Include="Globals.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

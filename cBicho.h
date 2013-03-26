@@ -39,6 +39,7 @@ public:
 	void GetWidthHeight(int *w,int *h);
 
 	bool Collides(cRect *rc);
+	bool Collides2(cRect *rc);
 	bool cBicho::CollidesWall(int *map);
 	bool CollidesMapWall(int *map,bool right);
 	bool CollidesMapTop(int *map);
