@@ -40,6 +40,7 @@ bool cGame::Init()
 	if(!res) return false;
 	Enemy.SetWidthHeight(32,32);
 	Enemy.SetTile(4,1);
+	Enemy.SetSpeed(1);
 
 
 	//Player initialization
@@ -147,7 +148,11 @@ bool cGame::Process()
 	}
 	else Player.Stop();
 	
-	
+	//Enemy Logic
+	int x,y;
+	Player.GetTile(&x,&y);
+	Enemy.NextStep(x,y,Scene.GetMap());
+
 	//Game Logic
 	Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {

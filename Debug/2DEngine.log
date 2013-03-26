@@ -1,4 +1,4 @@
-﻿Build started 3/26/2013 7:08:33 PM.
+﻿Build started 3/26/2013 7:44:03 PM.
      1>Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\2DEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -33,4 +33,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.49
+Time Elapsed 00:00:01.42
