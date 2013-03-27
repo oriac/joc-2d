@@ -16,6 +16,10 @@
 #define STATE_LOOKDOWN		5
 #define STATE_SHOOT_LEFT	6
 #define STATE_SHOOT_RIGHT	7
+#define STATE_DUPLEFT		8
+#define STATE_DUPRIGHT		9
+#define STATE_DDOWNLEFT		10
+#define STATE_DDOWNRIGHT	11
 
 class cRect
 {

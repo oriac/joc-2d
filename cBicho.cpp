@@ -70,7 +70,7 @@ bool cBicho::CollidesWall(int* map, bool right)
 		if(right) {
 
 			xaux = x;
-			x += STEP_LENGTH;
+			x += STEP_LENGTH*speed;
 
 			if(CollidesMapWall(map,true))
 			{
@@ -82,7 +82,7 @@ bool cBicho::CollidesWall(int* map, bool right)
 		}
 		else {
 			xaux = x;
-			x -= STEP_LENGTH;
+			x -= STEP_LENGTH*speed;
 
 			if(CollidesMapWall(map,false))
 			{
@@ -100,7 +100,7 @@ bool cBicho::CollidesTopBot(int *map, bool top) {
 	int yaux;
 	
 	//Whats next tile?
-	if( (x % TILE_SIZE) == 0)
+	if( (y % TILE_SIZE) == 0)
 	{
 		if(top) {
 
@@ -155,7 +155,27 @@ bool cBicho::CollidesMapWall(int *map,bool right)
 }
 
 
+
 bool cBicho::CollidesMapTop(int *map) {
+	int tile_x,tile_y;
+	int j;
+	int width_tiles,height_tiles;
+
+	tile_x = x / TILE_SIZE;
+	tile_y = y / TILE_SIZE;
+	width_tiles  = w / TILE_SIZE;
+	height_tiles = h / TILE_SIZE;
+
+	tile_y += height_tiles;
+	if( (x % TILE_SIZE) != 0) width_tiles++;
+	for(j=0;j<width_tiles;j++)
+	{
+		if(map[ tile_x+j + ((tile_y)*SCENE_WIDTH) ] != 0)	return true;
+	}
+	
+	return false;
+}
+/*bool cBicho::CollidesMapTop(int *map) {
 	int tile_x,tile_y;
 	int width_tiles;
 	bool on_base;
@@ -186,7 +206,7 @@ bool cBicho::CollidesMapTop(int *map) {
 		i++;
 	}
 	return on_base;
-}
+}*/
 
 /*bool cBicho::CollidesMapFloor(int *map)
 {
@@ -282,7 +302,7 @@ void cBicho::MoveUp(int *map)
 		if(CollidesMapTop(map))
 		{
 			y = yaux;
-			state = STATE_LOOKUP*speed;
+			state = STATE_LOOKUP;
 		}
 	}
 	//Advance, no problem
@@ -292,7 +312,7 @@ void cBicho::MoveUp(int *map)
 
 		if(state != STATE_LOOKUP)
 		{
-			state = STATE_LOOKUP*speed;
+			state = STATE_LOOKUP;
 			seq = 0;
 			delay = 0;
 		}
@@ -395,7 +415,7 @@ void cBicho::Shoot(int *map)
 			seq = 0;
 			delay = 0;
 		}
-	else if(state == STATE_LOOKUP) {
+	/*else if(state == STATE_LOOKUP) {
 			state = STATE_LOOKUP;
 			seq = 0;
 			delay = 0;
@@ -404,8 +424,8 @@ void cBicho::Shoot(int *map)
 			state = STATE_LOOKDOWN;
 			seq = 0;
 			delay = 0;
-	}
-	else	{
+	}*/
+	else if(state == STATE_SHOOT_RIGHT || state == STATE_WALKRIGHT || state == STATE_LOOKRIGHT)	{
 			state = STATE_SHOOT_RIGHT;
 			seq = 0;
 			delay = 0;

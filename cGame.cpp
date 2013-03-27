@@ -13,10 +13,7 @@ cGame::~cGame(void)
 bool cGame::Init()
 {
 	bool res=true;
-	collide = false;
-	for (int i = 0; i < 100; ++i) {
-		Disparo[i] = false;
-	}
+	
 	//Disparo = false;
 	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -55,6 +52,17 @@ bool cGame::Init()
 	startCd = -500;
 	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
+
+	collide = false;
+	
+	//Shoots init
+	for (int i = 0; i < 100; ++i) {
+		Disparo[i] = false;
+		Shoot[i].SetWidthHeight(32,32);
+		Shoot[i].SetSpeed(2);
+	}
+	shootCount = 0;
+
 
 	return res;
 }
@@ -99,24 +107,25 @@ bool cGame::Process()
 	
 	//Process Input
 	if(keys[27])	res=false;
-	
-	if(keys[GLUT_KEY_UP]) {
-		Player.MoveUp(Scene.GetMap());
-		int x,y;
-		Player.GetPosition(&x,&y);
-		if(y-Scene.getDesp() > GAME_WIDTH/3 ) Scene.Scroll(2);
+	if(keys[GLUT_KEY_UP]||keys[GLUT_KEY_DOWN]||keys[GLUT_KEY_LEFT]||keys[GLUT_KEY_RIGHT]) {
+		if(keys[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
+		if(keys[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
+		if(keys[GLUT_KEY_DOWN]) Player.MoveDown(Scene.GetMap());
+		if(keys[GLUT_KEY_UP]) Player.MoveUp(Scene.GetMap());
+		if(keys[GLUT_KEY_DOWN] && keys[GLUT_KEY_RIGHT]) {
+			Player.SetState(STATE_DDOWNRIGHT);
+		}
+		else if(keys[GLUT_KEY_DOWN] && keys[GLUT_KEY_LEFT]) {
+			Player.SetState(STATE_DDOWNLEFT);
+		}
+		if(keys[GLUT_KEY_UP] && keys[GLUT_KEY_LEFT]) {
+			Player.SetState(STATE_DUPLEFT);
+		}
+		else if(keys[GLUT_KEY_UP] && keys[GLUT_KEY_RIGHT]) {
+			Player.SetState(STATE_DUPRIGHT);
+		}
 	}
-	if(keys[GLUT_KEY_LEFT]) {
-		Player.MoveLeft(Scene.GetMap());
-		
-	}
-	if(keys[GLUT_KEY_RIGHT])	Player.MoveRight(Scene.GetMap());
-	if(keys[GLUT_KEY_DOWN]) {
-		Player.MoveDown(Scene.GetMap());
-		int x,y;
-		Player.GetPosition(&x,&y);
-		if(y-Scene.getDesp() < GAME_WIDTH/5 ) Scene.Scroll(-2);
-	}
+	else Player.Stop();
 	if (keys[GLUT_KEY_F1])		{
 		
 		endCd = glutGet(GLUT_ELAPSED_TIME);
@@ -127,74 +136,36 @@ bool cGame::Process()
 			int x;
 			int y;
 			Player.Shoot(Scene.GetMap());
-			Player.GetTile(&x,&y);
-			//bool pState = Player.GetState();
-			if(Player.GetState() == STATE_WALKLEFT||Player.GetState() == STATE_LOOKLEFT||Player.GetState() == STATE_SHOOT_LEFT)
-				Shoot[shootCount].SetTile(x-1,y);
-			else if(Player.GetState() == STATE_LOOKUP)
-				Shoot[shootCount].SetTile(x,y+2);
-			else if(Player.GetState() == STATE_LOOKDOWN)
-				Shoot[shootCount].SetTile(x,y-1);
-			else
-				Shoot[shootCount].SetTile(x+2,y);
-			Shoot[shootCount].SetWidthHeight(32,32);
+			Player.GetPosition(&x,&y);
+			Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
 			Shoot[shootCount].SetState(Player.GetState());
-			Shoot[shootCount].SetSpeed(2);
-			Disparo[shootCount] = true;
+			Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),true)||
+									Shoot[shootCount].CollidesMapWall(Scene.GetMap(),true)||
+									Shoot[shootCount].CollidesMapTop(Scene.GetMap())||
+									Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 			shootCount = (shootCount+1)%100;
 			
 		}
-		//Shoot.MoveLeft(Scene.GetMap());
 	}
-	else Player.Stop();
+
+	//Scroll
+	int x,y;
+	Player.GetPosition(&x,&y);
+	if(y-Scene.getDesp() > GAME_HEIGHT/3 ) Scene.Scroll(2);
+	else if(y-Scene.getDesp() < GAME_HEIGHT/5 ) Scene.Scroll(-2);
+	
 	
 	//Enemy Logic
-	int x,y;
 	Player.GetTile(&x,&y);
-	Enemy.NextStep(x,y,Scene.GetMap());
+	//Enemy.NextStep(x,y,Scene.GetMap());
 
 	//Game Logic
-	Player.Logic(Scene.GetMap());
+	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
-		if (Disparo[i] == true) {
-			int shootState = Shoot[i].GetState(); 
-			switch (shootState) {
-				case STATE_SHOOT_LEFT:
-					Shoot[i].MoveLeft(Scene.GetMap());
-					break;
-				case STATE_SHOOT_RIGHT:
-					Shoot[i].MoveRight(Scene.GetMap());
-					break;
-				case STATE_WALKLEFT:
-					Shoot[i].MoveLeft(Scene.GetMap());					
-					break;
-				case STATE_WALKRIGHT:
-					Shoot[i].MoveRight(Scene.GetMap());
-					break;
-				case STATE_LOOKLEFT:
-					Shoot[i].MoveLeft(Scene.GetMap());
-					break;
-				case STATE_LOOKRIGHT:
-					Shoot[i].MoveRight(Scene.GetMap());
-					break;
-				case STATE_LOOKUP:
-					Shoot[i].MoveUp(Scene.GetMap());
-					break;
-				case STATE_LOOKDOWN:
-					Shoot[i].MoveDown(Scene.GetMap());
-					break;
-			}
-			//Shoot[i].MoveLeft(Scene.GetMap());
-			if(shootState == STATE_SHOOT_RIGHT||shootState == STATE_WALKRIGHT||shootState == STATE_LOOKRIGHT)
-				Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),true);
-			else if(shootState == STATE_LOOKUP)
-				Disparo[i] = !Shoot[i].CollidesTopBot(Scene.GetMap(),true);
-			else if(shootState == STATE_LOOKDOWN)
-				Disparo[i] = !Shoot[i].CollidesTopBot(Scene.GetMap(),false);
-			else Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap(),false);
-			
-			
-			//Disparo[i] = !Shoot[i].CollidesWall(Scene.GetMap());
+		if(Shoot[i].IsActive()) {
+			int shootState = Shoot[i].GetState();
+			Shoot[i].ShootStep(shootState,Scene.GetMap());
+			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			cRect pos;
 			if(!collide) {
 				Enemy.GetArea(&pos);
@@ -222,7 +193,7 @@ void cGame::Render()
 	//collide = false;
 	Player.GetArea(&pos2);
 	for(int i=0;i<100;i++) {
-		if(Disparo[i]) {
+		if(Shoot[i].IsActive()) {
 			Shoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
 	

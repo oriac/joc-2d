@@ -33,6 +33,14 @@ void cPlayer::Draw(int tex_id)
 								break;
 		case STATE_SHOOT_RIGHT: xo = 0.5f; yo = 1.0f;
 								break;
+		case STATE_DUPLEFT:		xo = 0.50f;	yo = 0.25f;
+								break;
+		case STATE_DUPRIGHT:	xo = 0.50f;	yo = 0.25f;
+								break;
+		case STATE_DDOWNLEFT:	xo = 0.50f;	yo = 0.50f;
+								break;
+		case STATE_DDOWNRIGHT:	xo = 0.50f;	yo = 0.50f;
+								break;
 	}
 	xf = xo + 0.25f;
 	yf = yo - 0.25f;
