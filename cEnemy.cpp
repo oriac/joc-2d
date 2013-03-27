@@ -2,7 +2,10 @@
 #include <vector>
 #include "cEnemy.h"
 using namespace std;
-cEnemy::cEnemy() {}
+cEnemy::cEnemy() 
+{
+	alive = true;
+}
 cEnemy::~cEnemy(){}
 
 void cEnemy::Draw(int tex_id)
@@ -40,24 +43,79 @@ void cEnemy::Draw(int tex_id)
 
 	DrawRect(tex_id,xo,yo,xf,yf);
 }
-void cEnemy::NextStep(int x, int y, int*map) {
+
+bool cEnemy::IsAlive()
+{
+	return alive;
+}
+
+void cEnemy::kill()
+{
+	alive = false;
+}
+
+int cEnemy::NextStep(int x, int y, int*map) {
 	int posx,posy;
-	int dx[4] = {-1, 1, 0, 0};
-    int dy[4] = {0, 0, -1, 1};
-	int min,actual,nx,ny,mov;
+	int nx,ny;
+	Estado actual;
 	cBicho::GetTile(&posx,&posy);
-	min = 100000;
-	mov = -1;
-	for( int k = 0; k < 4; ++k) {
-			nx = dx[k];
-			ny = dy[k];
-			actual = Logic(x,y,posx+nx,posy+ny);
-			if (actual != -1 && actual < min) {
-				min = actual;
-				mov = k;
-			}
+	actual = Logic(x,y,posx,posy, map);
+	if (actual.dist != -1) {
+		nx = actual.nextx - posx;
+		ny = actual.nexty - posy;
 	}
-	switch (mov) {
+	if (actual.dist > 0 ) {
+		switch (nx){
+		case 1:
+			{
+				switch (ny){
+					case 0:
+						return 0;
+						break;
+					case 1:
+						return 2;
+						break;
+					case -1:
+						return 3;
+						break;
+				}
+			}
+			break;
+		case -1:
+			{
+				switch (ny){
+					case 0:
+						return 1;
+						break;
+					case 1:
+						return 2;
+						break;
+					case -1:
+						return 3;
+						break;
+				}
+			}
+			break;
+		case 0:
+			{
+				switch (ny) {
+					case -1:
+						return 3;
+						break;
+					case 1:
+						return 2;
+						break;
+				}
+			}
+			break;
+		}
+	}
+	else {
+		return -1;
+	}
+    //...
+}
+/*	switch (mov) {
 		case 0: 
 			cBicho::MoveLeft(map);
 			break;
@@ -75,40 +133,95 @@ void cEnemy::NextStep(int x, int y, int*map) {
 			break;
 	}
 
-}
-int cEnemy::Logic(int x, int y,int posx, int posy)
+}*/
+Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
 {
+	int auxx,auxy;
+	cBicho::GetPosition(&auxx, &auxy);
     Estado vec1;
 	vec1.x = posx;
 	vec1.y = posy;
 	vec1.dist = 0;
+	vec1.nextx = -1;
+	vec1.nexty = -1;
     queue <Estado > vecinos;
     vecinos.push(vec1);
     vector< vector<int> > visitados(25,vector<int> (25,0));
     int dx[4] = {-1, 1, 0, 0};
     int dy[4] = {0, 0, -1, 1};
+	bool primer = true;
     while( ! vecinos.empty() ){
             Estado actual = vecinos.front();
             vecinos.pop();
             if(actual.x == x && actual.y == y) {
-				return actual.dist;
+				cBicho::SetPosition(auxx,auxy);
+				return actual;
             }
             visitados[actual.x][actual.y]=1;
             for( int k = 0; k < 4; ++k) {
+				bool collides = false; 
                 int nx = dx[k] + actual.x;
                 int ny = dy[k] + actual.y;
                 if (nx < 25 && nx >= 0 && ny >=0 && ny < 25) {
-                    if (visitados[nx][ny] !=1) {
+                    if (visitados[nx][ny] !=1 ) {
+						cBicho::SetTile(actual.x,actual.y);
+						if ( k == 0) collides = cBicho::CollidesWall(map,false);
+						else if ( k == 1 ) collides = cBicho::CollidesWall(map,true);
+						else if ( k == 2 ) collides = cBicho::CollidesTopBot(map,false);
+						else collides = cBicho::CollidesTopBot(map,true);
+						if ( !collides ) {
                             Estado adyacente;
                             adyacente.x = nx;
                             adyacente.y = ny;
 							adyacente.dist = actual.dist+1;
+							if (primer) {
+								adyacente.nextx = nx;
+								adyacente.nexty = ny;
+							}
+							else {
+								adyacente.nextx = actual.nextx;
+								adyacente.nexty = actual.nexty;
+							}
                             vecinos.push(adyacente);
                             visitados[nx][ny] = 1;
+						}
                     }
                 }
             }
+			primer = false;
             //vecinos.pop();
     }
-    return -1;
+	cBicho::SetPosition(auxx,auxy);
+	Estado aux;
+	aux.dist = -1;
+    return aux;
+}
+
+void cEnemy::SetStep(int x, int y, int * map)
+{
+int posEx, posEy;
+	GetPosition(&posEx,&posEy);	
+	if (posEx % 16 == 0 && posEy % 16 == 0) nextStep = (NextStep(x,y,map));
+	switch (nextStep) {
+		case -1:
+			Stop();
+			break;
+		case 0:
+			MoveRight(map);
+			break;
+		case 1:
+			MoveLeft(map);
+			break;
+		case 2:
+			MoveUp(map);
+			break;
+		case 3:
+			MoveDown(map);
+			break;
+	}
+}
+
+int cEnemy::GetStep()
+{
+	return this->nextStep;
 }
