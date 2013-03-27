@@ -9,15 +9,23 @@
             int x;
             int y;
 			int dist;
+			int nextx;
+			int nexty;
     } Estado;
 class cEnemy: public cBicho
 {
 public:
 	cEnemy();
 	~cEnemy();
-
+	int GetStep();
+	void SetStep(int x, int y, int * map);
 	void Draw(int tex_id);
-	void NextStep(int x, int y, int*map);
-	int Logic(int x, int y,int posx, int posy);
+	int NextStep(int x, int y, int*map);
+	Estado Logic(int x, int y,int posx, int posy, int* map);
+	void kill();
+	bool IsAlive();
+private:
+	bool alive;
+	int nextStep;
 };
 
