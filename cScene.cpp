@@ -3,7 +3,7 @@
 
 cScene::cScene(void)
 {
-	desplazament = 0;
+	desplazament = -80;
 }
 
 cScene::~cScene(void)
@@ -89,6 +89,10 @@ int* cScene::GetMap()
 
 void cScene::Scroll(int i) {
 	desplazament += i;
+}
+
+void cScene::ResetCam() {
+	desplazament = -80;
 }
 
 int cScene::getDesp() {

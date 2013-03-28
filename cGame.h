@@ -20,6 +20,7 @@ public:
 	void Finalize();
 
 	//Input
+	void NextLevel();
 	void ReadKeyboard(unsigned char key, int x, int y, bool press);
 	void ReadMouse(int button, int state, int x, int y);
 	//Process
@@ -33,6 +34,7 @@ private:
 	cPlayer Player;
 	cShoot Shoot[100];
 	cEnemy Enemy;
+	cEnemy Enemy2;
 	int shootCount;
 	bool Disparo[100];
 	bool collide;
@@ -41,4 +43,5 @@ private:
 	int startTime;
 	int loopTime;
 	int endCd, startCd, shootCd;
+	int ActualLevel;
 };

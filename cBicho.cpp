@@ -75,7 +75,7 @@ bool cBicho::CollidesWall(int* map, bool right)
 			if(CollidesMapWall(map,true))
 			{
 				x = xaux;
-				state = STATE_LOOKRIGHT;
+				//state = STATE_LOOKRIGHT;
 				return true;
 			}
 			x = xaux;
@@ -87,7 +87,7 @@ bool cBicho::CollidesWall(int* map, bool right)
 			if(CollidesMapWall(map,false))
 			{
 				x = xaux;
-				state = STATE_LOOKLEFT;
+				//state = STATE_LOOKLEFT;
 				return true;
 			}
 			x = xaux;
@@ -110,7 +110,7 @@ bool cBicho::CollidesTopBot(int *map, bool top) {
 			if(CollidesMapTop(map))
 			{
 				y = yaux;
-				state = STATE_LOOKUP;
+				//state = STATE_LOOKUP;
 				return true;
 			}
 			y = yaux;
@@ -122,7 +122,7 @@ bool cBicho::CollidesTopBot(int *map, bool top) {
 			if(CollidesMapFloor(map))
 			{
 				y = yaux;
-				state = STATE_LOOKDOWN;
+				//state = STATE_LOOKDOWN;
 				return true;
 			}
 			y = yaux;

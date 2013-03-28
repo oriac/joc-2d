@@ -10,6 +10,13 @@ cGame::~cGame(void)
 {
 }
 
+void cGame::NextLevel() {
+	bool result = false;
+	result = Scene.LoadLevel(2);
+	Scene.ResetCam();
+	Player.SetTile(4,1);
+}
+
 bool cGame::Init()
 {
 	bool res=true;
@@ -35,9 +42,28 @@ bool cGame::Init()
 	//Enemy initialization
 
 	if(!res) return false;
+	vector<Point> pat (4);
+	Enemy.Init(true, pat);
 	Enemy.SetWidthHeight(32,32);
-	Enemy.SetTile(4,1);
+	Enemy.SetTile(7,1);
 	Enemy.SetSpeed(1);
+	Point p1,p2,p3,p4;
+	p1.tilex = 29;
+	p1.tiley = 6;
+	p2.tilex = 29;
+	p2.tiley= 3;
+	p3.tilex = 4;
+	p3.tiley = 3;
+	p4.tilex = 4;
+	p4.tiley = 6;
+	pat[0] = p1;
+	pat[1] = p2;
+	pat[2] = p3;
+	pat[3] = p4;
+	Enemy2.Init(false,pat);
+	Enemy2.SetWidthHeight(32,32);
+	Enemy2.SetTile(4,6);
+	Enemy2.SetSpeed(1);
 
 
 	//Player initialization
@@ -156,7 +182,11 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
-	//Enemy.NextStep(x,y,Scene.GetMap());
+	if (!collide)
+	Enemy.SetStep(x,y,Scene.GetMap());
+	Enemy2.SetStep(x,y,Scene.GetMap());
+
+	if (y > 50) this->NextLevel();
 
 	//Game Logic
 	//Player.Logic(Scene.GetMap());
@@ -198,7 +228,7 @@ void cGame::Render()
 		}
 	
 	}
-
+	Enemy2.Draw(Data.GetID(IMG_PLAYER));
 	if (!collide) Enemy.Draw(Data.GetID(IMG_PLAYER));
 	glutSwapBuffers();
 }

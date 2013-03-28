@@ -23,6 +23,7 @@ public:
 	void Draw(int tex_id);
 	int *GetMap();
 	void Scroll(int i);
+	void ResetCam();
 	int getDesp();
 private:
 	int map[SCENE_WIDTH * SCENE_HEIGHT];	//scene
