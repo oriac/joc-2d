@@ -38,6 +38,7 @@ private:
 	int shootCount;
 	bool Disparo[100];
 	bool collide;
+	bool collide2;
 	cData Data;
 	int endTime;
 	int startTime;

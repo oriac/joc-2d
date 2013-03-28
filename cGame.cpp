@@ -198,10 +198,21 @@ bool cGame::Process()
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			cRect pos;
 			if(!collide) {
-				Enemy.GetArea(&pos);
-				if(Shoot[i].Collides2(&pos)) {
+				//Enemy.GetArea(&pos);
+				Shoot[i].GetArea(&pos);
+				//if(Shoot[i].Collides(&pos)) {
+				if(Enemy.Collides2(&pos)) {
 					collide = true;
-					Disparo[i]=false;
+					Shoot[i].SetActive(false);
+				}
+			}
+			if(!collide2) {
+				//Enemy.GetArea(&pos);
+				Shoot[i].GetArea(&pos);
+				//if(Shoot[i].Collides(&pos)) {
+				if(Enemy2.Collides2(&pos)) {
+					collide2 = true;
+					Shoot[i].SetActive(false);
 				}
 			}
 		}
@@ -228,7 +239,7 @@ void cGame::Render()
 		}
 	
 	}
-	Enemy2.Draw(Data.GetID(IMG_PLAYER));
+	if(!collide2)Enemy2.Draw(Data.GetID(IMG_PLAYER));
 	if (!collide) Enemy.Draw(Data.GetID(IMG_PLAYER));
 	glutSwapBuffers();
 }

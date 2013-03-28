@@ -58,7 +58,7 @@ bool cBicho::Collides2(cRect *rc)
 	/*if (((x>=rc->left) && (x+w<=rc->left)) || ((x>=rc->right) && (x+w<=rc->right)) &&
 		((y>=rc->bottom) && (y+h<=rc->bottom)) || ((y>=rc->top) && (y+h<=rc->top))) return true;
 	else return false;*/
-	return ((x>=rc->left) && (x+w<=rc->right) && (y>=rc->bottom) && (y+h<=rc->top));
+	return ((x<rc->right) && (rc->left<x+w) && (y<rc->top) && (rc->bottom<y+h));
 }
 bool cBicho::CollidesWall(int* map, bool right) 
 {
