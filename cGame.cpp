@@ -58,7 +58,7 @@ bool cGame::Init()
 	//Shoots init
 	for (int i = 0; i < 100; ++i) {
 		Disparo[i] = false;
-		Shoot[i].SetWidthHeight(32,32);
+		Shoot[i].SetWidthHeight(16,16);
 		Shoot[i].SetSpeed(2);
 	}
 	shootCount = 0;
@@ -139,10 +139,9 @@ bool cGame::Process()
 			Player.GetPosition(&x,&y);
 			Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
 			Shoot[shootCount].SetState(Player.GetState());
-			Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),true)||
-									Shoot[shootCount].CollidesMapWall(Scene.GetMap(),true)||
-									Shoot[shootCount].CollidesMapTop(Scene.GetMap())||
-									Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
+		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+			Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
 			shootCount = (shootCount+1)%100;
 			
 		}
@@ -162,10 +161,11 @@ bool cGame::Process()
 	//Game Logic
 	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
+		
 		if(Shoot[i].IsActive()) {
 			int shootState = Shoot[i].GetState();
-			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
+			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			cRect pos;
 			if(!collide) {
 				Enemy.GetArea(&pos);

@@ -1,6 +1,7 @@
 #pragma once
 #include "cBicho.h"
 #include "cScene.h"
+#include "cPlayer.h"
 
 #define STEP_LENGTH		8
 
@@ -17,6 +18,7 @@ public:
 	void SetActive(bool b);
 	void ShootStep(int shootState,int *map);
 	void ShootCollides(int shootState, int *map);
+	void CanShoot(int *map,cPlayer &Player);
 private:
 	bool active;
 };

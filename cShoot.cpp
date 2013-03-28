@@ -31,19 +31,19 @@ void cShoot::SetInitPos(int playerState,int x, int y) {
 	if(playerState == STATE_WALKLEFT||playerState == STATE_LOOKLEFT||playerState == STATE_SHOOT_LEFT)
 				SetPosition(x-(TILE_SIZE*2)+(x%4),y);
 			else if(playerState == STATE_LOOKUP)
-				SetPosition(x,y+(TILE_SIZE*2)+(y%4));
+				SetPosition(x-(x%4),y+(TILE_SIZE*2)-(y%4));
 			else if(playerState == STATE_LOOKDOWN)
 				SetPosition(x,y-(TILE_SIZE*2)+(y%4));
 			else if(playerState == STATE_WALKRIGHT||playerState == STATE_LOOKRIGHT||playerState == STATE_SHOOT_RIGHT)
-				SetPosition(x+(TILE_SIZE*2)+(x%4),y);
+				SetPosition(x+(TILE_SIZE*2)-(x%4),y);
 			else if(playerState == STATE_DUPLEFT)
-				SetPosition(x-(TILE_SIZE*2)+(x%4),y+(TILE_SIZE*2)+(y%4));
+				SetPosition(x-(TILE_SIZE*2)+(x%4),y+(TILE_SIZE*2)-(y%4));
 			else if(playerState == STATE_DUPRIGHT)
 				SetPosition(x+(TILE_SIZE*2)+(x%4),y+(TILE_SIZE*2)+(y%4));
 			else if(playerState == STATE_DDOWNLEFT)
-				SetPosition(x-(TILE_SIZE*2)+(x%4),y-(TILE_SIZE*2)+(y%4));
+				SetPosition(x-(TILE_SIZE*2)-(x%4),y-(TILE_SIZE*2)-(y%4));
 			else if(playerState == STATE_DDOWNRIGHT)
-				SetPosition(x+(TILE_SIZE*2)+(x%4),y-(TILE_SIZE*2)+(y%4));
+				SetPosition(x+(TILE_SIZE*2)-(x%4),y-(TILE_SIZE*2)+(y%4));
 }
 
 void cShoot::ShootStep(int shootState, int *map) {
@@ -112,4 +112,35 @@ void cShoot::ShootCollides(int shootState, int *map) {
 		active = !(CollidesWall(map,false)||CollidesTopBot(map,false));
 	else if(shootState == STATE_DDOWNRIGHT)
 		active = !(CollidesWall(map,true)||CollidesTopBot(map,false));
+}
+
+void cShoot::CanShoot(int *map, cPlayer &Player) {
+	int x,y;
+	GetTile(&x,&y);
+	if(map[x+(y*SCENE_WIDTH)] != 0 || map[(x+1)+(y*SCENE_WIDTH)] != 0 || map[x+((y+1)*SCENE_WIDTH)] != 0 || map[(x+1)+((y+1)*SCENE_WIDTH)] != 0) active = false;
+	else active = true;
+	if(active) {
+		if(GetState() == STATE_SHOOT_LEFT || GetState() == STATE_LOOKLEFT || GetState() == STATE_WALKLEFT ) {
+			active = !(Player.CollidesMapWall(map,false));
+			if(map[(x+1)+y*SCENE_WIDTH] != 0) active = false;
+			if(map[(x+2)+y*SCENE_WIDTH] != 0) active = false;
+		}
+		else if(GetState() == STATE_LOOKDOWN) {
+			active = !(Player.CollidesTopBot(map,false));
+			if(map[x+((y+1)*SCENE_WIDTH)] != 0) active = false;
+		}
+			//else if(map[(x+1)+((y+1)*SCENE_WIDTH)] != 0) active = false;
+		else if(GetState() == STATE_LOOKUP) {
+			active = !(Player.CollidesTopBot(map,true));
+			//if(map[x+((y-1)*SCENE_WIDTH)] != 0) active = false;
+			//if(map[(x+1)+y*SCENE_WIDTH]) active = false;
+			active = !CollidesMapTop(map);
+		}
+		else if(GetState() == STATE_SHOOT_RIGHT || GetState() == STATE_LOOKRIGHT || GetState() == STATE_WALKRIGHT ) {
+			active = !(Player.CollidesMapWall(map,true));
+			if(map[(x+1)+y*SCENE_WIDTH] != 0) active = false;
+			//if(map[(x+1)+y*SCENE_WIDTH] != 0) active = false;
+		}
+	}
+
 }
