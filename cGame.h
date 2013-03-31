@@ -34,7 +34,7 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cShoot Shoot[100];
-	cEnemy Enemy;
+	cEnemy Enemy[20];
 	cEnemy Enemy2;
 	cHud Hud;
 	int shootCount;

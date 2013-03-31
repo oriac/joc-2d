@@ -51,10 +51,14 @@ bool cGame::Init()
 
 	if(!res) return false;
 	vector<Point> pat (4);
-	Enemy.Init(true, pat);
-	Enemy.SetWidthHeight(32,32);
-	Enemy.SetTile(30,4);
-	Enemy.SetSpeed(1);
+	for (int i = 0; i < 20; ++i) {
+		Enemy[i].Init(true, pat);
+		Enemy[i].SetWidthHeight(32,32);
+		Enemy[i].SetTile(10,4+i);
+		Enemy[i].SetSpeed(1);
+
+	}
+	
 	Point p1,p2,p3,p4;
 	p1.tilex = 29;
 	p1.tiley = 6;
@@ -190,15 +194,17 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
-	if(Enemy.IsAlive()) {
-		cRect pos;
-		Player.GetArea(&pos);
-		if(Enemy.Collides2(&pos)) {
-			Enemy.kill();
-			Player.LoseHp();
+	for (int i = 0; i < 20; ++i) {
+		if(Enemy[i].IsAlive()) {
+			cRect pos;
+			Player.GetArea(&pos);
+			if(Enemy[i].Collides2(&pos)) {
+				Enemy[i].kill();
+				Player.LoseHp();
+			}
 		}
+		if (Enemy[i].IsAlive()) Enemy[i].SetStep(x,y,Scene.GetMap());
 	}
-	if (Enemy.IsAlive()) Enemy.SetStep(x,y,Scene.GetMap());
 	if (Enemy2.IsAlive()) Enemy2.SetStep(x,y,Scene.GetMap());
 
 	if (y > 120) this->NextLevel();
@@ -212,13 +218,15 @@ bool cGame::Process()
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			cRect pos;
-			if(Enemy.IsAlive()) {
-				//Enemy.GetArea(&pos);
-				Shoot[i].GetArea(&pos);
-				//if(Shoot[i].Collides(&pos)) {
-				if(Enemy.Collides2(&pos)) {
-					Enemy.kill();
-					Shoot[i].SetActive(false);
+			for (int j = 0; j < 20; ++j) {
+				if(Enemy[j].IsAlive()) {
+					//Enemy.GetArea(&pos);
+					Shoot[i].GetArea(&pos);
+					//if(Shoot[i].Collides(&pos)) {
+					if(Enemy[j].Collides2(&pos)) {
+						Enemy[j].kill();
+						Shoot[i].SetActive(false);
+					}
 				}
 			}
 			if(Enemy2.IsAlive()) {
@@ -255,7 +263,9 @@ void cGame::Render()
 	
 	}
 	if(Enemy2.IsAlive())Enemy2.Draw(Data.GetID(IMG_PLAYER));
-	if (Enemy.IsAlive())Enemy.Draw(Data.GetID(IMG_PLAYER));
+	for ( int i = 0; i < 20; ++i) {
+		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
+	}
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),"1337",Scene.getDesp());
 	glutSwapBuffers();
