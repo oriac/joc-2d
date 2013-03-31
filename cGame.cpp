@@ -34,6 +34,8 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
+	res = Data.LoadImage(IMG_LEVEL01,"map1_1.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL01_2,"map1_2.png",GL_RGBA);
 	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
@@ -182,11 +184,10 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
-	if (!collide)
-	Enemy.SetStep(x,y,Scene.GetMap());
-	Enemy2.SetStep(x,y,Scene.GetMap());
+	if (Enemy.IsAlive()) Enemy.SetStep(x,y,Scene.GetMap());
+	if (Enemy2.IsAlive()) Enemy2.SetStep(x,y,Scene.GetMap());
 
-	if (y > 50) this->NextLevel();
+	if (y > 120) this->NextLevel();
 
 	//Game Logic
 	//Player.Logic(Scene.GetMap());
@@ -197,21 +198,21 @@ bool cGame::Process()
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			cRect pos;
-			if(!collide) {
+			if(Enemy.IsAlive()) {
 				//Enemy.GetArea(&pos);
 				Shoot[i].GetArea(&pos);
 				//if(Shoot[i].Collides(&pos)) {
 				if(Enemy.Collides2(&pos)) {
-					collide = true;
+					Enemy.kill();
 					Shoot[i].SetActive(false);
 				}
 			}
-			if(!collide2) {
+			if(Enemy2.IsAlive()) {
 				//Enemy.GetArea(&pos);
 				Shoot[i].GetArea(&pos);
 				//if(Shoot[i].Collides(&pos)) {
 				if(Enemy2.Collides2(&pos)) {
-					collide2 = true;
+					Enemy2.kill();
 					Shoot[i].SetActive(false);
 				}
 			}
@@ -227,7 +228,7 @@ void cGame::Render()
 	
 	glLoadIdentity();
 
-	Scene.Draw(Data.GetID(IMG_BLOCKS));
+	Scene.Draw(Data.GetID(IMG_LEVEL01));
 	Player.Draw(Data.GetID(IMG_PLAYER));
 	
 	cRect pos2;
@@ -239,7 +240,7 @@ void cGame::Render()
 		}
 	
 	}
-	if(!collide2)Enemy2.Draw(Data.GetID(IMG_PLAYER));
-	if (!collide) Enemy.Draw(Data.GetID(IMG_PLAYER));
+	if(Enemy2.IsAlive())Enemy2.Draw(Data.GetID(IMG_PLAYER));
+	if (Enemy.IsAlive()) Enemy.Draw(Data.GetID(IMG_PLAYER));
 	glutSwapBuffers();
 }
