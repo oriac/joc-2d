@@ -79,7 +79,27 @@ void cScene::Draw(int tex_id)
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D,tex_id);
 	glTranslatef(0., -desplazament, 0.);
-	glCallList(id_DL);
+	int px, py;
+	//glCallList(id_DL);
+	//glBindTexture(GL_TEXTURE_2D,tex_id);
+	px=SCENE_Xo;
+	py=SCENE_Yo+((SCENE_HEIGHT/2)*TILE_SIZE);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(0,0);	glVertex2i(px, py);
+		glTexCoord2f(1,0);	glVertex2i(px+32*16,py);
+		glTexCoord2f(1,1);	glVertex2i(px+32*16,SCENE_Yo);
+		glTexCoord2f(0,1);	glVertex2i(px,SCENE_Yo);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D,tex_id+1);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(0,0);	glVertex2i(px, py*2);
+		glTexCoord2f(1,0);	glVertex2i(px+32*16,py*2);
+		glTexCoord2f(1,1);	glVertex2i(px+32*16,py);
+		glTexCoord2f(0,1);	glVertex2i(px,py);
+	glEnd();
+	//glBindTexture(GL_TEXTURE_2D,0);
+	//glCallList(id_DL);
+	
 	glDisable(GL_TEXTURE_2D);
 }
 int* cScene::GetMap()
