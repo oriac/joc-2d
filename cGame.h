@@ -5,6 +5,7 @@
 #include "cShoot.h"
 #include "cData.h"
 #include "cEnemy.h"
+#include "cHud.h"
 
 #define GAME_WIDTH	640
 #define GAME_HEIGHT 480
@@ -35,6 +36,7 @@ private:
 	cShoot Shoot[100];
 	cEnemy Enemy;
 	cEnemy Enemy2;
+	cHud Hud;
 	int shootCount;
 	bool Disparo[100];
 	bool collide;

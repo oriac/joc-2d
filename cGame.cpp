@@ -34,8 +34,14 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
+	res = Data.LoadImage(IMG_HEART,"heart.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_FONT,"font.png",GL_RGBA);
+	if(!res) return false;
 	res = Data.LoadImage(IMG_LEVEL01,"map1_1.png",GL_RGBA);
+	if(!res) return false;
 	res = Data.LoadImage(IMG_LEVEL01_2,"map1_2.png",GL_RGBA);
+	if(!res) return false;
 	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
@@ -47,7 +53,7 @@ bool cGame::Init()
 	vector<Point> pat (4);
 	Enemy.Init(true, pat);
 	Enemy.SetWidthHeight(32,32);
-	Enemy.SetTile(7,1);
+	Enemy.SetTile(30,4);
 	Enemy.SetSpeed(1);
 	Point p1,p2,p3,p4;
 	p1.tilex = 29;
@@ -184,6 +190,14 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
+	if(Enemy.IsAlive()) {
+		cRect pos;
+		Player.GetArea(&pos);
+		if(Enemy.Collides2(&pos)) {
+			Enemy.kill();
+			Player.LoseHp();
+		}
+	}
 	if (Enemy.IsAlive()) Enemy.SetStep(x,y,Scene.GetMap());
 	if (Enemy2.IsAlive()) Enemy2.SetStep(x,y,Scene.GetMap());
 
@@ -241,6 +255,8 @@ void cGame::Render()
 	
 	}
 	if(Enemy2.IsAlive())Enemy2.Draw(Data.GetID(IMG_PLAYER));
-	if (Enemy.IsAlive()) Enemy.Draw(Data.GetID(IMG_PLAYER));
+	if (Enemy.IsAlive())Enemy.Draw(Data.GetID(IMG_PLAYER));
+	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
+	Hud.DrawPoints(Data.GetID(IMG_FONT),"1337",Scene.getDesp());
 	glutSwapBuffers();
 }
