@@ -34,7 +34,7 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
-	res = Data.LoadImage(IMG_HEART,"heart.png",GL_RGBA);
+	res = Data.LoadImage(IMG_HEART,"heart2.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_FONT,"font.png",GL_RGBA);
 	if(!res) return false;
