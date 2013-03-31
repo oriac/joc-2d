@@ -1,7 +1,7 @@
 
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {}
+cPlayer::cPlayer() {hp = 3;}
 cPlayer::~cPlayer(){}
 
 void cPlayer::Draw(int tex_id)
@@ -46,4 +46,12 @@ void cPlayer::Draw(int tex_id)
 	yf = yo - 0.25f;
 
 	DrawRect(tex_id,xo,yo,xf,yf);
+}
+
+int cPlayer::GetHp() {
+	return hp;
+}
+
+void cPlayer::LoseHp() {
+	hp--;
 }

@@ -12,4 +12,8 @@ public:
 	~cPlayer();
 
 	void Draw(int tex_id);
+	int GetHp();
+	void LoseHp();
+private:
+	int hp;
 };
