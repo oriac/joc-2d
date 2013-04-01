@@ -20,6 +20,8 @@
 #define STATE_DUPRIGHT		9
 #define STATE_DDOWNLEFT		10
 #define STATE_DDOWNRIGHT	11
+#define STATE_WALKUP		12
+#define STATE_WALKDOWN		13
 
 class cRect
 {

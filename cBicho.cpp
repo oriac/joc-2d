@@ -310,9 +310,9 @@ void cBicho::MoveUp(int *map)
 	{
 		y += STEP_LENGTH*speed;
 
-		if(state != STATE_LOOKUP)
+		if(state != STATE_WALKUP && state != STATE_DUPLEFT && state != STATE_DUPRIGHT)
 		{
-			state = STATE_LOOKUP;
+			state = STATE_WALKUP;
 			seq = 0;
 			delay = 0;
 		}
@@ -339,9 +339,9 @@ void cBicho::MoveDown(int *map)
 	else
 	{
 		y -= STEP_LENGTH*speed;
-		if(state != STATE_LOOKDOWN)
+		if(state != STATE_WALKDOWN && state != STATE_DDOWNLEFT && state != STATE_DDOWNRIGHT)
 		{
-			state = STATE_LOOKDOWN;
+			state = STATE_WALKDOWN;
 			seq = 0;
 			delay = 0;
 		}
@@ -369,7 +369,7 @@ void cBicho::MoveLeft(int *map)
 	else
 	{
 		x -= STEP_LENGTH*speed;
-		if(state != STATE_WALKLEFT)
+		if(state != STATE_WALKLEFT && state !=STATE_DUPLEFT && state != STATE_DDOWNLEFT)
 		{
 			state = STATE_WALKLEFT;
 			seq = 0;
@@ -399,7 +399,7 @@ void cBicho::MoveRight(int *map)
 	{
 		x += STEP_LENGTH*speed;
 
-		if(state != STATE_WALKRIGHT)
+		if(state != STATE_WALKRIGHT && state !=STATE_DUPRIGHT && state != STATE_DDOWNRIGHT)
 		{
 			state = STATE_WALKRIGHT;
 			seq = 0;
@@ -437,6 +437,12 @@ void cBicho::Stop()
 	{
 		case STATE_WALKLEFT:	state = STATE_LOOKLEFT;		break;
 		case STATE_WALKRIGHT:	state = STATE_LOOKRIGHT;	break;
+		case STATE_WALKUP:		state = STATE_LOOKUP;		break;
+		case STATE_WALKDOWN:	state = STATE_LOOKDOWN;		break;
+		case STATE_DUPLEFT:		state = STATE_LOOKUP;		break;
+		case STATE_DUPRIGHT:	state =	STATE_LOOKUP;		break;
+		case STATE_DDOWNLEFT:	state = STATE_LOOKDOWN;		break;
+		case STATE_DDOWNRIGHT:	state =	STATE_LOOKDOWN;		break;
 	}
 }
 void cBicho::Jump(int *map)
