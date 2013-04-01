@@ -11,7 +11,7 @@ void cEnemy::Init(bool ismelee, vector<Point> pat)
 	this->patrulla = pat;
 	this->melee = ismelee;
 	this->PointActual = 0;
-	alive = true;
+	alive = false;
 }
 void cEnemy::Draw(int tex_id)
 {	
@@ -52,6 +52,11 @@ void cEnemy::Draw(int tex_id)
 bool cEnemy::IsAlive()
 {
 	return alive;
+}
+
+void cEnemy::Active()
+{
+	alive = true;
 }
 
 void cEnemy::kill()
@@ -136,7 +141,7 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
 	vec1.nexty = -1;
     queue <Estado > vecinos;
     vecinos.push(vec1);
-    vector< vector<int> > visitados(36,vector<int> (57,0));
+    vector< vector<int> > visitados(32,vector<int> (128,0));
     int dx[4] = {-1, 1, 0, 0};
     int dy[4] = {0, 0, -1, 1};
 	bool primer = true;
@@ -152,7 +157,7 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
 				bool collides = false; 
                 int nx = dx[k] + actual.x;
                 int ny = dy[k] + actual.y;
-                if (nx < 36 && nx >= 0 && ny >=0 && ny < 57) {
+				if (nx < 32 && nx >= 0 && ny >=0 && ny < 128 && actual.dist < 50) {
                     if (visitados[nx][ny] !=1 ) {
 						cBicho::SetTile(actual.x,actual.y);
 						if ( k == 0) collides = cBicho::CollidesWall(map,false);

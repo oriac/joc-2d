@@ -34,13 +34,14 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cShoot Shoot[100];
-	cEnemy Enemy[20];
-	cEnemy Enemy2;
+	cEnemy Enemy[10];
+	cEnemy Enemy2[10];
 	cHud Hud;
 	int shootCount;
 	bool Disparo[100];
 	bool collide;
 	bool collide2;
+	bool firstTrap;
 	cData Data;
 	int endTime;
 	int startTime;

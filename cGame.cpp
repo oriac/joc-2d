@@ -20,7 +20,7 @@ void cGame::NextLevel() {
 bool cGame::Init()
 {
 	bool res=true;
-	
+	this->firstTrap = false;
 	//Disparo = false;
 	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -51,10 +51,11 @@ bool cGame::Init()
 
 	if(!res) return false;
 	vector<Point> pat (4);
-	for (int i = 0; i < 20; ++i) {
+	for (int i = 0; i < 10; ++i) {
 		Enemy[i].Init(true, pat);
 		Enemy[i].SetWidthHeight(32,32);
-		Enemy[i].SetTile(10,4+i);
+		if ( i < 5) Enemy[i].SetTile((i*4)%32,36);
+		else Enemy[i].SetTile((i*2)%32,76);
 		Enemy[i].SetSpeed(1);
 
 	}
@@ -68,14 +69,25 @@ bool cGame::Init()
 	p3.tiley = 3;
 	p4.tilex = 4;
 	p4.tiley = 6;
-	pat[0] = p1;
-	pat[1] = p2;
-	pat[2] = p3;
-	pat[3] = p4;
-	Enemy2.Init(false,pat);
-	Enemy2.SetWidthHeight(32,32);
-	Enemy2.SetTile(4,6);
-	Enemy2.SetSpeed(1);
+	for ( int i = 0; i < 10; ++i) {
+		int aux = 20; // ok
+		if ( i > 2 &&  i < 5) aux = 46;
+		else if ( i >= 5 && i < 7) aux = 120;
+		else aux = 100; //ok
+		p1.tiley = aux+2;
+		p2.tiley = aux;
+		p3.tiley = aux;
+		p4.tiley = aux+2;
+		pat[0] = p1;
+		pat[1] = p2;
+		pat[2] = p3;
+		pat[3] = p4;
+		Enemy2[i].Init(false,pat);
+		Enemy2[i].SetWidthHeight(32,32);
+		Enemy2[i].SetTile(4+(i*2),aux);
+		Enemy2[i].SetSpeed(1);
+		Enemy2[i].Active();
+	}
 
 
 	//Player initialization
@@ -194,7 +206,13 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
-	for (int i = 0; i < 20; ++i) {
+	if ( y > 50  && !this->firstTrap) {
+			firstTrap = true;
+			for ( int i = 0; i < 10; ++i) {
+				Enemy[i].Active();
+			}
+	}
+	for (int i = 0; i < 10; ++i) {
 		if(Enemy[i].IsAlive()) {
 			cRect pos;
 			Player.GetArea(&pos);
@@ -205,7 +223,8 @@ bool cGame::Process()
 		}
 		if (Enemy[i].IsAlive()) Enemy[i].SetStep(x,y,Scene.GetMap());
 	}
-	if (Enemy2.IsAlive()) Enemy2.SetStep(x,y,Scene.GetMap());
+	for ( int i = 0; i < 10; ++i)
+	if (Enemy2[i].IsAlive()) Enemy2[i].SetStep(x,y,Scene.GetMap());
 
 	if (y > 120) this->NextLevel();
 
@@ -218,24 +237,28 @@ bool cGame::Process()
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
 			cRect pos;
-			for (int j = 0; j < 20; ++j) {
-				if(Enemy[j].IsAlive()) {
+			bool muerte = false;
+			for (int j = 0; j < 10; ++j) {
+				if(Enemy[j].IsAlive() && !muerte) {
 					//Enemy.GetArea(&pos);
 					Shoot[i].GetArea(&pos);
 					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy[j].Collides2(&pos)) {
 						Enemy[j].kill();
 						Shoot[i].SetActive(false);
+						muerte = true;
 					}
 				}
 			}
-			if(Enemy2.IsAlive()) {
-				//Enemy.GetArea(&pos);
-				Shoot[i].GetArea(&pos);
-				//if(Shoot[i].Collides(&pos)) {
-				if(Enemy2.Collides2(&pos)) {
-					Enemy2.kill();
-					Shoot[i].SetActive(false);
+			for (int j = 0; j < 10; ++j) {
+				if(Enemy2[j].IsAlive()) {
+					//Enemy.GetArea(&pos);
+					Shoot[i].GetArea(&pos);
+					//if(Shoot[i].Collides(&pos)) {
+					if(Enemy2[j].Collides2(&pos)) {
+						Enemy2[j].kill();
+						Shoot[i].SetActive(false);
+					}
 				}
 			}
 		}
@@ -262,8 +285,8 @@ void cGame::Render()
 		}
 	
 	}
-	if(Enemy2.IsAlive())Enemy2.Draw(Data.GetID(IMG_PLAYER));
-	for ( int i = 0; i < 20; ++i) {
+	for ( int i = 0; i < 10; ++i) {
+		if(Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
 		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
 	}
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());

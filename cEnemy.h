@@ -30,6 +30,7 @@ public:
 	void Draw(int tex_id);
 	int NextStep(int x, int y, int*map);
 	Estado Logic(int x, int y,int posx, int posy, int* map);
+	void Active();
 	void kill();
 	bool IsAlive();
 	int CaulculStep(int x, int y);
