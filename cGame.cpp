@@ -46,6 +46,8 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
 	if(!res) return false;
+	res = Data.LoadImage(IMG_BLUEHEART,"blueheart.png",GL_RGBA);
+	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
 
@@ -117,16 +119,19 @@ bool cGame::Init()
 	
 	//Shoots init
 	for (int i = 0; i < 100; ++i) {
-		Disparo[i] = false;
 		Shoot[i].SetWidthHeight(16,16);
 		Shoot[i].SetSpeed(2);
 	}
+	for (int i = 0; i < 100; ++i) {
+		Shoot2[i].SetWidthHeight(16,16);
+		Shoot2[i].SetSpeed(2);
+	}
 	for (int i = 0; i < 500; ++i) {
-		//Disparo[i] = false;
 		EnemyShoot[i].SetWidthHeight(16,16);
 		EnemyShoot[i].SetSpeed(2);
 	}
 	shootCount = 0;
+	shootCount2 = 0;
 	enemyShootCount = 0;
 
 
@@ -175,14 +180,26 @@ void cGame::ReadMouse(int button, int state, int x, int y)
 bool cGame::Process()
 {
 	bool res=true;
+	int x,y;
+	cRect pos;
 	
 	//Process Input
 	if(keys[27])	res=false;
 	if(keysSpecial[GLUT_KEY_UP]||keysSpecial[GLUT_KEY_DOWN]||keysSpecial[GLUT_KEY_LEFT]||keysSpecial[GLUT_KEY_RIGHT]) {
 		if(keysSpecial[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
 		if(keysSpecial[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
-		if(keysSpecial[GLUT_KEY_DOWN]) Player.MoveDown(Scene.GetMap());
-		if(keysSpecial[GLUT_KEY_UP]) Player.MoveUp(Scene.GetMap());
+		if(keysSpecial[GLUT_KEY_DOWN]) {
+			int x1,y1;
+			Player.GetPosition(&x1,&y1);
+			if(y1-Scene.getDesp() >= 0)
+				Player.MoveDown(Scene.GetMap());
+		}
+		if(keysSpecial[GLUT_KEY_UP]) {
+			int x1,y1;
+			Player.GetPosition(&x1,&y1);
+			if(y1-Scene.getDesp() < GAME_HEIGHT-64)
+				Player.MoveUp(Scene.GetMap());
+		}
 		if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_RIGHT]) {
 			Player.SetState(STATE_DDOWNRIGHT);
 		}
@@ -221,12 +238,22 @@ bool cGame::Process()
 	if(keys[119]||keys[115]||keys[97]||keys[100]) {
 		if(keys[97]) Player2.MoveLeft(Scene.GetMap());
 		if(keys[100]) Player2.MoveRight(Scene.GetMap());
-		if(keys[115]) Player2.MoveDown(Scene.GetMap());
-		if(keys[119]) Player2.MoveUp(Scene.GetMap());
-		if(keys[115] && keys[100]) {
+		if(keys[120]) {
+			int x1,y1;
+			Player2.GetPosition(&x1,&y1);
+			if(y1-Scene.getDesp() >= 0)
+				Player2.MoveDown(Scene.GetMap());
+		}
+		if(keys[119]) {
+			int x1,y1;
+			Player2.GetPosition(&x1,&y1);
+			if(y1-Scene.getDesp() < GAME_HEIGHT-64)
+				Player2.MoveUp(Scene.GetMap());
+		}
+		if(keys[120] && keys[100]) {
 			Player2.SetState(STATE_DDOWNRIGHT);
 		}
-		else if(keys[115] && keys[97]) {
+		else if(keys[120] && keys[97]) {
 			Player2.SetState(STATE_DDOWNLEFT);
 		}
 		if(keys[119] && keys[97]) {
@@ -236,33 +263,35 @@ bool cGame::Process()
 			Player2.SetState(STATE_DUPRIGHT);
 		}
 	}
-	else Player.Stop();
-	if (keys[120]) {
+	else Player2.Stop();
+	if (keysSpecial[GLUT_KEY_F4]) {
 		
-		//endCd = glutGet(GLUT_ELAPSED_TIME);
-		//shootCd = endCd - startCd;
-		if(shootCd > 250) {
-			//startCd = glutGet(GLUT_ELAPSED_TIME);
+		end2Cd = glutGet(GLUT_ELAPSED_TIME);
+		shoot2Cd = end2Cd - start2Cd;
+		if(shoot2Cd > 250) {
+			start2Cd = glutGet(GLUT_ELAPSED_TIME);
 		
 			int x;
 			int y;
 			Player2.Shoot(Scene.GetMap());
 			Player2.GetPosition(&x,&y);
-			Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
-			Shoot[shootCount].SetState(Player.GetState());
+			Shoot2[shootCount2].SetInitPos(Player2.GetState(),x,y);
+			Shoot2[shootCount2].SetState(Player2.GetState());
 			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
-			Shoot[shootCount].CanShoot(Scene.GetMap(),Player2);
-			shootCount = (shootCount+1)%100;
+			Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
+			shootCount2 = (shootCount2+1)%100;
 			
 		}
 	}
 
 	//Scroll
-	int x,y;
-	Player.GetPosition(&x,&y);
-	if(y-Scene.getDesp() > GAME_HEIGHT/3 ) Scene.Scroll(2);
-	else if(y-Scene.getDesp() < GAME_HEIGHT/5 ) Scene.Scroll(-2);
+	int x1,y1;
+	Player.GetPosition(&x1,&y1);
+	int x2,y2;
+	Player2.GetPosition(&x2,&y2);
+	if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+	else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
 	
 	
 	//Enemy Logic
@@ -291,18 +320,46 @@ bool cGame::Process()
 
 	for (int i = 0; i < 10; ++i) {
 		if(Enemy[i].IsAlive()) {
-			cRect pos;
+			//cRect pos;
 			Player.GetArea(&pos);
 			if(Enemy[i].Collides2(&pos)) {
 				Enemy[i].kill();
 				Player.LoseHp();
 			}
+
+		}
+		if(Enemy[i].IsAlive()) {
+			//cRect pos;
+			Player2.GetArea(&pos);
+			if(Enemy[i].Collides2(&pos)) {
+				Enemy[i].kill();
+				Player2.LoseHp();
+			}
+
 		}
 		if (Enemy[i].IsAlive()) Enemy[i].SetStep(x,y,Scene.GetMap());
 	}
 	endECd = glutGet(GLUT_ELAPSED_TIME);
 	shootECd = endECd - startECd;
 	for ( int i = 0; i < 10; ++i) {
+		if(Enemy2[i].IsAlive()) {
+			//cRect pos;
+			Player.GetArea(&pos);
+			if(Enemy2[i].Collides2(&pos)) {
+				Enemy2[i].kill();
+				Player.LoseHp();
+			}
+
+		}
+		if(Enemy2[i].IsAlive()) {
+			//cRect pos;
+			Player2.GetArea(&pos);
+			if(Enemy2[i].Collides2(&pos)) {
+				Enemy2[i].kill();
+				Player2.LoseHp();
+			}
+
+		}
 		if (Enemy2[i].IsAlive()) {
 			Enemy2[i].SetStep(x,y,Scene.GetMap());
 			
@@ -323,17 +380,15 @@ bool cGame::Process()
 		}
 	}
 
-	if (y > 120) this->NextLevel();
-
 	//Game Logic
+	if (y > 120) this->NextLevel();
 	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
-		
 		if(Shoot[i].IsActive()) {
 			int shootState = Shoot[i].GetState();
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
-			cRect pos;
+			//cRect pos;
 			bool muerte = false;
 			for (int j = 0; j < 10; ++j) {
 				if(Enemy[j].IsAlive() && !muerte) {
@@ -360,16 +415,55 @@ bool cGame::Process()
 			}
 		}
 	}
+	for(int i=0;i<100;i++) {
+		if(Shoot2[i].IsActive()) {
+			int shootState = Shoot2[i].GetState();
+			Shoot2[i].ShootCollides(shootState, Scene.GetMap());
+			Shoot2[i].ShootStep(shootState,Scene.GetMap());
+			//cRect pos;
+			bool muerte = false;
+			for (int j = 0; j < 10; ++j) {
+				if(Enemy[j].IsAlive() && !muerte) {
+					//Enemy.GetArea(&pos);
+					Shoot2[i].GetArea(&pos);
+					//if(Shoot[i].Collides(&pos)) {
+					if(Enemy[j].Collides2(&pos)) {
+						Enemy[j].kill();
+						Shoot2[i].SetActive(false);
+						muerte = true;
+					}
+				}
+			}
+			for (int j = 0; j < 10; ++j) {
+				if(Enemy2[j].IsAlive()) {
+					//Enemy.GetArea(&pos);
+					Shoot2[i].GetArea(&pos);
+					//if(Shoot[i].Collides(&pos)) {
+					if(Enemy2[j].Collides2(&pos)) {
+						Enemy2[j].kill();
+						Shoot2[i].SetActive(false);
+					}
+				}
+			}
+		}
+	}
 	for(int i=0;i<500;i++) {
 		if(EnemyShoot[i].IsActive()) {
 			int shootState = EnemyShoot[i].GetState();
 			EnemyShoot[i].ShootCollides(shootState, Scene.GetMap());
 			EnemyShoot[i].ShootStep(shootState,Scene.GetMap());
-			cRect pos;
+			//cRect pos;
 			EnemyShoot[i].GetArea(&pos);
 			if(Player.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
 				Player.LoseHp();
+			}
+		}
+		if(EnemyShoot[i].IsActive()) {
+			EnemyShoot[i].GetArea(&pos);
+			if(Player2.Collides2(&pos)) {
+				EnemyShoot[i].SetActive(false);
+				Player2.LoseHp();
 			}
 		}
 	}
@@ -385,29 +479,42 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_LEVEL01));
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	glColor3f(0.0f,0.0f,1.0f);
 	Player2.Draw(Data.GetID(IMG_PLAYER));
+	glColor3f(1.0f,1.0f,1.0f);
 	
 	cRect pos2;
 	//collide = false;
-	Player.GetArea(&pos2);
+	//Player.GetArea(&pos2);
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
+			//glColor3f(0.0f,0.0f,1.0f);
 			Shoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
 	
 	}
+	for(int i=0;i<100;i++) {
+		if(Shoot2[i].IsActive()) {
+			glColor3f(0.0f,0.0f,1.0f);
+			Shoot2[i].Draw(Data.GetID(IMG_BULLET));
+		}
+	
+	}
 	for ( int i = 0; i < 10; ++i) {
-		if(Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
+		if (Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
 		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
 	}
 	for(int i=0;i<500;i++) {
 		if(EnemyShoot[i].IsActive()) {
+			glColor3f(0.8f,0.0f,1.0f);
 			EnemyShoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
 	
 	}
+	glColor3f(1.0f,1.0f,1.0f);
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
+	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),"1337",Scene.getDesp());
-	if(Player.GetHp()<0)Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
+	if(Player.GetHp() <= 0 && Player2.GetHp() <= 0)Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
 	glutSwapBuffers();
 }
