@@ -105,6 +105,14 @@ bool cGame::Init()
 	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
 
+	Player2.SetWidthHeight(32,32);
+	Player2.SetSpeed(1);
+	Player2.SetTile(16,1);
+	//shootCount = 0;
+	//startCd = -500;
+	//Player.SetWidthHeight(32,32);
+	Player2.SetState(STATE_LOOKRIGHT);
+
 	collide = false;
 	
 	//Shoots init
@@ -154,6 +162,11 @@ void cGame::ReadKeyboard(unsigned char key, int x, int y, bool press)
 	keys[key] = press;
 }
 
+void cGame::ReadKeyboardSpecial(unsigned char key, int x, int y, bool press)
+{
+	keysSpecial[key] = press;
+}
+
 void cGame::ReadMouse(int button, int state, int x, int y)
 {
 }
@@ -165,26 +178,26 @@ bool cGame::Process()
 	
 	//Process Input
 	if(keys[27])	res=false;
-	if(keys[GLUT_KEY_UP]||keys[GLUT_KEY_DOWN]||keys[GLUT_KEY_LEFT]||keys[GLUT_KEY_RIGHT]) {
-		if(keys[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
-		if(keys[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
-		if(keys[GLUT_KEY_DOWN]) Player.MoveDown(Scene.GetMap());
-		if(keys[GLUT_KEY_UP]) Player.MoveUp(Scene.GetMap());
-		if(keys[GLUT_KEY_DOWN] && keys[GLUT_KEY_RIGHT]) {
+	if(keysSpecial[GLUT_KEY_UP]||keysSpecial[GLUT_KEY_DOWN]||keysSpecial[GLUT_KEY_LEFT]||keysSpecial[GLUT_KEY_RIGHT]) {
+		if(keysSpecial[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
+		if(keysSpecial[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
+		if(keysSpecial[GLUT_KEY_DOWN]) Player.MoveDown(Scene.GetMap());
+		if(keysSpecial[GLUT_KEY_UP]) Player.MoveUp(Scene.GetMap());
+		if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_RIGHT]) {
 			Player.SetState(STATE_DDOWNRIGHT);
 		}
-		else if(keys[GLUT_KEY_DOWN] && keys[GLUT_KEY_LEFT]) {
+		else if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_LEFT]) {
 			Player.SetState(STATE_DDOWNLEFT);
 		}
-		if(keys[GLUT_KEY_UP] && keys[GLUT_KEY_LEFT]) {
+		if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_LEFT]) {
 			Player.SetState(STATE_DUPLEFT);
 		}
-		else if(keys[GLUT_KEY_UP] && keys[GLUT_KEY_RIGHT]) {
+		else if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_RIGHT]) {
 			Player.SetState(STATE_DUPRIGHT);
 		}
 	}
 	else Player.Stop();
-	if (keys[GLUT_KEY_F1])		{
+	if (keysSpecial[GLUT_KEY_F1]) {
 		
 		endCd = glutGet(GLUT_ELAPSED_TIME);
 		shootCd = endCd - startCd;
@@ -200,6 +213,46 @@ bool cGame::Process()
 			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 			Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
+			shootCount = (shootCount+1)%100;
+			
+		}
+	}
+	//input Player2
+	if(keys[119]||keys[115]||keys[97]||keys[100]) {
+		if(keys[97]) Player2.MoveLeft(Scene.GetMap());
+		if(keys[100]) Player2.MoveRight(Scene.GetMap());
+		if(keys[115]) Player2.MoveDown(Scene.GetMap());
+		if(keys[119]) Player2.MoveUp(Scene.GetMap());
+		if(keys[115] && keys[100]) {
+			Player2.SetState(STATE_DDOWNRIGHT);
+		}
+		else if(keys[115] && keys[97]) {
+			Player2.SetState(STATE_DDOWNLEFT);
+		}
+		if(keys[119] && keys[97]) {
+			Player2.SetState(STATE_DUPLEFT);
+		}
+		else if(keys[119] && keys[100]) {
+			Player2.SetState(STATE_DUPRIGHT);
+		}
+	}
+	else Player.Stop();
+	if (keys[120]) {
+		
+		//endCd = glutGet(GLUT_ELAPSED_TIME);
+		//shootCd = endCd - startCd;
+		if(shootCd > 250) {
+			//startCd = glutGet(GLUT_ELAPSED_TIME);
+		
+			int x;
+			int y;
+			Player2.Shoot(Scene.GetMap());
+			Player2.GetPosition(&x,&y);
+			Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
+			Shoot[shootCount].SetState(Player.GetState());
+			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
+		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+			Shoot[shootCount].CanShoot(Scene.GetMap(),Player2);
 			shootCount = (shootCount+1)%100;
 			
 		}
@@ -332,6 +385,7 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_LEVEL01));
 	Player.Draw(Data.GetID(IMG_PLAYER));
+	Player2.Draw(Data.GetID(IMG_PLAYER));
 	
 	cRect pos2;
 	//collide = false;

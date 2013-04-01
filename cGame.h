@@ -23,6 +23,7 @@ public:
 	//Input
 	void NextLevel();
 	void ReadKeyboard(unsigned char key, int x, int y, bool press);
+	void ReadKeyboardSpecial(unsigned char key, int x, int y, bool press);
 	void ReadMouse(int button, int state, int x, int y);
 	//Process
 	bool Process();
@@ -31,8 +32,10 @@ public:
 
 private:
 	unsigned char keys[256];
+	unsigned char keysSpecial[256];
 	cScene Scene;
 	cPlayer Player;
+	cPlayer Player2;
 	cShoot Shoot[100];
 	cShoot EnemyShoot[500];
 	cEnemy Enemy[10];
