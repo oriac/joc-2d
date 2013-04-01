@@ -12,6 +12,7 @@ public:
 	cHud(void);
 	~cHud(void);
 	void DrawHearts(int tex_id,int life,int d);
+	void DrawBlueHearts(int tex_id,int life,int d);
 	void DrawPoints(int tex_id,string Points,int d);
 	void DrawGameOver(int text_id,int d);
 private:
