@@ -14,9 +14,6 @@
     <ClCompile Include="cBicho.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cHud.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

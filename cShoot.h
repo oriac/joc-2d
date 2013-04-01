@@ -18,7 +18,7 @@ public:
 	void SetActive(bool b);
 	void ShootStep(int shootState,int *map);
 	void ShootCollides(int shootState, int *map);
-	void CanShoot(int *map,cPlayer &Player);
+	void CanShoot(int *map,cBicho &Player);
 private:
 	bool active;
 };

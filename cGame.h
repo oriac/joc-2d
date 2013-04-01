@@ -34,10 +34,12 @@ private:
 	cScene Scene;
 	cPlayer Player;
 	cShoot Shoot[100];
+	cShoot EnemyShoot[500];
 	cEnemy Enemy[10];
 	cEnemy Enemy2[10];
 	cHud Hud;
 	int shootCount;
+	int enemyShootCount;
 	bool Disparo[100];
 	bool collide;
 	bool collide2;
@@ -47,5 +49,6 @@ private:
 	int startTime;
 	int loopTime;
 	int endCd, startCd, shootCd;
+	int endECd, startECd, shootECd;
 	int ActualLevel;
 };

@@ -114,7 +114,7 @@ void cShoot::ShootCollides(int shootState, int *map) {
 		active = !(CollidesWall(map,true)||CollidesTopBot(map,false));
 }
 
-void cShoot::CanShoot(int *map, cPlayer &Player) {
+void cShoot::CanShoot(int *map, cBicho &Player) {
 	int x,y;
 	GetTile(&x,&y);
 	if(map[x+(y*SCENE_WIDTH)] != 0 || map[(x+1)+(y*SCENE_WIDTH)] != 0 || map[x+((y+1)*SCENE_WIDTH)] != 0 || map[(x+1)+((y+1)*SCENE_WIDTH)] != 0) active = false;

@@ -111,7 +111,13 @@ bool cGame::Init()
 		Shoot[i].SetWidthHeight(16,16);
 		Shoot[i].SetSpeed(2);
 	}
+	for (int i = 0; i < 100; ++i) {
+		//Disparo[i] = false;
+		EnemyShoot[i].SetWidthHeight(16,16);
+		EnemyShoot[i].SetSpeed(2);
+	}
 	shootCount = 0;
+	enemyShootCount = 0;
 
 
 	return res;
@@ -223,8 +229,28 @@ bool cGame::Process()
 		}
 		if (Enemy[i].IsAlive()) Enemy[i].SetStep(x,y,Scene.GetMap());
 	}
-	for ( int i = 0; i < 10; ++i)
-	if (Enemy2[i].IsAlive()) Enemy2[i].SetStep(x,y,Scene.GetMap());
+	endECd = glutGet(GLUT_ELAPSED_TIME);
+	shootECd = endECd - startECd;
+	for ( int i = 0; i < 10; ++i) {
+		if (Enemy2[i].IsAlive()) {
+			Enemy2[i].SetStep(x,y,Scene.GetMap());
+			
+				if(shootECd > 250) {
+					startECd = glutGet(GLUT_ELAPSED_TIME);
+		
+					int x;
+					int y;
+					//Player.Shoot(Scene.GetMap());
+					Enemy2[i].GetPosition(&x,&y);
+					EnemyShoot[enemyShootCount].SetInitPos(STATE_LOOKDOWN,x,y);
+					EnemyShoot[enemyShootCount].SetState(STATE_LOOKDOWN);
+					//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
+					//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+					EnemyShoot[enemyShootCount].CanShoot(Scene.GetMap(),Enemy2[i]);
+					enemyShootCount = (shootCount+1)%500;
+				}
+		}
+	}
 
 	if (y > 120) this->NextLevel();
 
@@ -263,6 +289,19 @@ bool cGame::Process()
 			}
 		}
 	}
+	for(int i=0;i<500;i++) {
+		if(EnemyShoot[i].IsActive()) {
+			int shootState = EnemyShoot[i].GetState();
+			EnemyShoot[i].ShootCollides(shootState, Scene.GetMap());
+			EnemyShoot[i].ShootStep(shootState,Scene.GetMap());
+			cRect pos;
+			EnemyShoot[i].GetArea(&pos);
+			if(Player.Collides2(&pos)) {
+				EnemyShoot[i].SetActive(false);
+				Player.LoseHp();
+			}
+		}
+	}
 	return res;
 }
 
@@ -289,7 +328,14 @@ void cGame::Render()
 		if(Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
 		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
 	}
+	for(int i=0;i<500;i++) {
+		if(EnemyShoot[i].IsActive()) {
+			EnemyShoot[i].Draw(Data.GetID(IMG_BULLET));
+		}
+	
+	}
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),"1337",Scene.getDesp());
+	if(Player.GetHp()<0)Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
 	glutSwapBuffers();
 }
