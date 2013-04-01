@@ -131,9 +131,10 @@ int cEnemy::NextStep(int x, int y, int*map) {
 
 Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
 {
-	int auxx,auxy;
+	int auxx,auxy,nx,ny;
+	bool collides;
 	cBicho::GetPosition(&auxx, &auxy);
-    Estado vec1;
+    Estado vec1, adyacente, actual;
 	vec1.x = posx;
 	vec1.y = posy;
 	vec1.dist = 0;
@@ -146,7 +147,7 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
     int dy[4] = {0, 0, -1, 1};
 	bool primer = true;
     while( ! vecinos.empty() ){
-            Estado actual = vecinos.front();
+            actual = vecinos.front();
             vecinos.pop();
             if(actual.x == x && actual.y == y) {
 				cBicho::SetPosition(auxx,auxy);
@@ -154,18 +155,27 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
             }
             visitados[actual.x][actual.y]=1;
             for( int k = 0; k < 4; ++k) {
-				bool collides = false; 
-                int nx = dx[k] + actual.x;
-                int ny = dy[k] + actual.y;
+				collides = false; 
+                nx = dx[k] + actual.x;
+                ny = dy[k] + actual.y;
 				if (nx < 32 && nx >= 0 && ny >=0 && ny < 128 && actual.dist < 50) {
                     if (visitados[nx][ny] !=1 ) {
 						cBicho::SetTile(actual.x,actual.y);
-						if ( k == 0) collides = cBicho::CollidesWall(map,false);
+						switch (k) {
+							case 0: collides = cBicho::CollidesWall(map,false);
+									break;
+							case 1: collides = cBicho::CollidesWall(map,true);
+									break;
+							case 2: collides = cBicho::CollidesTopBot(map,false);
+									break;
+							case 3: collides = cBicho::CollidesTopBot(map,true);
+									break;
+						}
+						/*if ( k == 0) collides = cBicho::CollidesWall(map,false);
 						else if ( k == 1 ) collides = cBicho::CollidesWall(map,true);
 						else if ( k == 2 ) collides = cBicho::CollidesTopBot(map,false);
-						else collides = cBicho::CollidesTopBot(map,true);
+						else collides = cBicho::CollidesTopBot(map,true);*/
 						if ( !collides ) {
-                            Estado adyacente;
                             adyacente.x = nx;
                             adyacente.y = ny;
 							adyacente.dist = actual.dist+1;

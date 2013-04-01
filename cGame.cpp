@@ -21,6 +21,8 @@ bool cGame::Init()
 {
 	bool res=true;
 	this->firstTrap = false;
+	bool firstPatrol = false;
+	bool secondPatrol = false;
 	//Disparo = false;
 	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -69,11 +71,11 @@ bool cGame::Init()
 	p3.tiley = 3;
 	p4.tilex = 4;
 	p4.tiley = 6;
-	for ( int i = 0; i < 10; ++i) {
-		int aux = 20; // ok
-		if ( i > 2 &&  i < 5) aux = 46;
-		else if ( i >= 5 && i < 7) aux = 120;
-		else aux = 100; //ok
+	for ( int i = 0; i < 10; i++) {
+		int aux;
+		if ( i < 5 ) aux = 46;
+		//else if ( i >= 2 &&  i < 5) aux = 100;
+		else if ( i >= 5) aux = 120;
 		p1.tiley = aux+2;
 		p2.tiley = aux;
 		p3.tiley = aux;
@@ -86,7 +88,7 @@ bool cGame::Init()
 		Enemy2[i].SetWidthHeight(32,32);
 		Enemy2[i].SetTile(4+(i*2),aux);
 		Enemy2[i].SetSpeed(1);
-		Enemy2[i].Active();
+		//if ( i <= 2) Enemy2[i].Active();
 	}
 
 
@@ -111,7 +113,7 @@ bool cGame::Init()
 		Shoot[i].SetWidthHeight(16,16);
 		Shoot[i].SetSpeed(2);
 	}
-	for (int i = 0; i < 100; ++i) {
+	for (int i = 0; i < 500; ++i) {
 		//Disparo[i] = false;
 		EnemyShoot[i].SetWidthHeight(16,16);
 		EnemyShoot[i].SetSpeed(2);
@@ -218,6 +220,22 @@ bool cGame::Process()
 				Enemy[i].Active();
 			}
 	}
+	if ( y > 90 && !this->secondPatrol) {
+		for ( int i = 5; i < 10; ++i) {
+				Enemy2[i].Active();
+				Enemy[i].Active();
+				//if ( i > 2 &&  i < 5) Enemy2[i].Active();
+		}
+		secondPatrol = true;
+	}
+	if ( y > 20 && !this->firstPatrol) {
+		for ( int i = 0; i < 5; ++i) {
+				Enemy2[i].Active();
+				//if ( i > 2 &&  i < 5) Enemy2[i].Active();
+		}
+		firstPatrol = true;
+	}
+
 	for (int i = 0; i < 10; ++i) {
 		if(Enemy[i].IsAlive()) {
 			cRect pos;
@@ -247,7 +265,7 @@ bool cGame::Process()
 					//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 					//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 					EnemyShoot[enemyShootCount].CanShoot(Scene.GetMap(),Enemy2[i]);
-					enemyShootCount = (shootCount+1)%500;
+					enemyShootCount = (enemyShootCount+1)%500;
 				}
 		}
 	}

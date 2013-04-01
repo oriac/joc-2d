@@ -44,6 +44,8 @@ private:
 	bool collide;
 	bool collide2;
 	bool firstTrap;
+	bool firstPatrol;
+	bool secondPatrol;
 	cData Data;
 	int endTime;
 	int startTime;
