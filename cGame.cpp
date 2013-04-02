@@ -19,7 +19,7 @@ void cGame::NextLevel() {
 
 bool cGame::Init()
 {
-	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	//PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	bool res=true;
 	this->firstTrap = false;
 	bool firstPatrol = false;
@@ -54,6 +54,9 @@ bool cGame::Init()
 
 	//Enemy initialization
 
+	res = Data.LoadImage(IMG_ENEMY2,"enemy2.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_ENEMY,"enemy.png",GL_RGBA);
 	if(!res) return false;
 	vector<Point> pat (4);
 	for (int i = 0; i < 10; ++i) {
@@ -97,6 +100,8 @@ bool cGame::Init()
 
 	//Player initialization
 	res = Data.LoadImage(IMG_PLAYER,"player.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_PLAYER2,"player2.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BULLET,"bullet3.png",GL_RGBA);
 	if(!res) return false;
@@ -215,7 +220,7 @@ bool cGame::Process()
 		}
 	}
 	else Player.Stop();
-	if (keysSpecial[GLUT_KEY_F1]) {
+	if (keysSpecial[GLUT_KEY_INSERT]) {
 		
 		endCd = glutGet(GLUT_ELAPSED_TIME);
 		shootCd = endCd - startCd;
@@ -232,6 +237,7 @@ bool cGame::Process()
 		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 			Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
 			shootCount = (shootCount+1)%100;
+			PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
 			
 		}
 	}
@@ -282,7 +288,6 @@ bool cGame::Process()
 		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 			Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
 			shootCount2 = (shootCount2+1)%100;
-			
 		}
 	}
 
@@ -480,9 +485,9 @@ void cGame::Render()
 
 	Scene.Draw(Data.GetID(IMG_LEVEL01));
 	Player.Draw(Data.GetID(IMG_PLAYER));
-	glColor3f(0.0f,0.0f,1.0f);
-	Player2.Draw(Data.GetID(IMG_PLAYER));
-	glColor3f(1.0f,1.0f,1.0f);
+	//glColor3f(0.0f,0.0f,1.0f);
+	Player2.Draw(Data.GetID(IMG_PLAYER2));
+	//glColor3f(1.0f,1.0f,1.0f);
 	
 	cRect pos2;
 	//collide = false;
@@ -503,8 +508,8 @@ void cGame::Render()
 	}
 	glColor3f(1.0f,1.0f,1.0f);
 	for ( int i = 0; i < 10; ++i) {
-		if (Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
-		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
+		if (Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_ENEMY2));
+		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_ENEMY));	
 	}
 	for(int i=0;i<500;i++) {
 		if(EnemyShoot[i].IsActive()) {
