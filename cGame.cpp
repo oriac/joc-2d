@@ -19,6 +19,7 @@ void cGame::NextLevel() {
 
 bool cGame::Init()
 {
+	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	bool res=true;
 	this->firstTrap = false;
 	bool firstPatrol = false;
