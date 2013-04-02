@@ -19,7 +19,8 @@ void cGame::NextLevel() {
 
 bool cGame::Init()
 {
-	//PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
+	Scene.ResetCam();
 	bool res=true;
 	this->firstTrap = false;
 	bool firstPatrol = false;
@@ -94,9 +95,12 @@ bool cGame::Init()
 		Enemy2[i].SetWidthHeight(32,32);
 		Enemy2[i].SetTile(4+(i*2),aux);
 		Enemy2[i].SetSpeed(1);
+		//Enemy2[i].kill();
 		//if ( i <= 2) Enemy2[i].Active();
 	}
-
+	firstPatrol = false;
+	firstTrap = false;
+	secondPatrol = false;
 
 	//Player initialization
 	res = Data.LoadImage(IMG_PLAYER,"player.png",GL_RGBA);
@@ -129,14 +133,17 @@ bool cGame::Init()
 	for (int i = 0; i < 100; ++i) {
 		Shoot[i].SetWidthHeight(16,16);
 		Shoot[i].SetSpeed(2);
+		Shoot[i].SetActive(false);
 	}
 	for (int i = 0; i < 100; ++i) {
 		Shoot2[i].SetWidthHeight(16,16);
 		Shoot2[i].SetSpeed(2);
+		Shoot[i].SetActive(false);
 	}
 	for (int i = 0; i < 500; ++i) {
 		EnemyShoot[i].SetWidthHeight(16,16);
 		EnemyShoot[i].SetSpeed(2);
+		Shoot[i].SetActive(false);
 	}
 	shootCount = 0;
 	shootCount2 = 0;
@@ -306,6 +313,7 @@ bool cGame::Process()
 		if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
 		else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
 	}
+	else if(Player2.GetHp() <= 0 && Player.GetHp() <= 0);
 	else if(Player2.GetHp() <= 0) {
 		if(y1-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
 		else if(y1-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
@@ -493,8 +501,14 @@ bool cGame::Process()
 			}
 		}
 	}
-	if(Player.GetHp() <= 0) Player.Dead();
-	if(Player2.GetHp() <= 0) Player2.Dead();
+	if(Player.GetHp() <= 0) {
+		Player.Dead();
+		Player.SetTile(4,1);
+	}
+	if(Player2.GetHp() <= 0) {
+		Player2.Dead();
+		Player2.SetTile(16,1);
+	}
 	return res;
 }
 
