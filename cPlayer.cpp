@@ -74,6 +74,12 @@ void cPlayer::AddPoints(int punts) {
 	points += punts;
 }
 
+void cPlayer::Respawn() {
+	hp = 3;
+	alive = true;
+	points = 0;
+}
+
 string cPlayer::GetPoints() {
 	/*char aux[10];
 	sprintf(aux,"%d",&points);

@@ -105,6 +105,7 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BULLET,"bullet3.png",GL_RGBA);
 	if(!res) return false;
+	Player.Respawn();
 	Player.SetWidthHeight(32,32);
 	Player.SetSpeed(1);
 	Player.SetTile(4,1);
@@ -113,6 +114,7 @@ bool cGame::Init()
 	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
 
+	Player2.Respawn();
 	Player2.SetWidthHeight(32,32);
 	Player2.SetSpeed(1);
 	Player2.SetTile(16,1);
@@ -294,6 +296,7 @@ bool cGame::Process()
 			}
 		}
 	}
+	if (keysSpecial[GLUT_KEY_F9]) Init();
 	//Scroll
 	int x1,y1;
 	Player.GetPosition(&x1,&y1);
@@ -501,8 +504,10 @@ void cGame::Render()
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	glLoadIdentity();
-
+	if(Player.GetHp()<=0&&Player2.GetHp()<=0)
+		glColor3f(1.0f,0.0f,0.0f);
 	Scene.Draw(Data.GetID(IMG_LEVEL01));
+	glColor3f(1.0f,1.0f,1.0f);
 	if(Player.isAlive())
 		Player.Draw(Data.GetID(IMG_PLAYER));
 	//glColor3f(0.0f,0.0f,1.0f);

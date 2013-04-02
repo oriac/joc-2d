@@ -107,6 +107,30 @@ void cHud::DrawGameOver(int tex_id, int d) {
 	}
 }
 
+void cHud::DrawLevelComplete(int tex_id, int d) {
+	int step_x,step_y;
+	float tx,ty;
+	tx = 1./10.;
+	ty = 1./6.;
+	//writing punts:
+	string aux = "level";
+	int n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,170.+50.*i,240+d);
+	}
+	aux = "complete";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,170.+50.*i,190+d);
+	}
+}
+
 void cHud::Draw(int tex_id, float tx,float ty, int step_x,int step_y,float trans_x, float trans_y) {
 			glPushMatrix();
 			//glTranslatef(240.+16.*i, 450+d, 0.);

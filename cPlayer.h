@@ -21,6 +21,7 @@ public:
 	bool isAlive();
 	void AddPoints(int punts);
 	void Dead();
+	void Respawn();
 	string GetPoints();
 private:
 	int hp;
