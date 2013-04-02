@@ -1,12 +1,35 @@
-﻿Build started 4/2/2013 1:22:25 PM.
-     1>Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" on node 2 (build target(s)).
+﻿Build started 03/04/2013 1:23:08.
+     1>Project "C:\Users\Oriac\git\joc-2d\2DEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\2DEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt cEnemy.cpp
-         cEnemy.cpp
-     1>c:\users\javi\vj\vj o\cenemy.cpp(233): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\javi\vj\vj o\cenemy.cpp(131): warning C4715: 'cEnemy::CaulculStep' : not all control paths return a value
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt GLUTMain.cpp cBicho.cpp cGame.cpp cScene.cpp cShoot.cpp
+         GLUTMain.cpp
+     1>c:\users\oriac\git\joc-2d\cshoot.h(6): warning C4005: 'STEP_LENGTH' : macro redefinition
+                 c:\users\oriac\git\joc-2d\cbicho.h(7) : see previous definition of 'STEP_LENGTH'
+         Generating Code...
+         Compiling...
+         cShoot.cpp
+     1>c:\users\oriac\git\joc-2d\cshoot.h(6): warning C4005: 'STEP_LENGTH' : macro redefinition
+                 c:\users\oriac\git\joc-2d\cbicho.h(7) : see previous definition of 'STEP_LENGTH'
+         cScene.cpp
+     1>c:\users\oriac\git\joc-2d\cscene.cpp(24): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\oriac\git\joc-2d\cscene.cpp(25): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(371) : see declaration of 'sprintf'
+     1>c:\users\oriac\git\joc-2d\cscene.cpp(27): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(234) : see declaration of 'fopen'
+     1>c:\users\oriac\git\joc-2d\cscene.cpp(41): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(253) : see declaration of 'fscanf'
+     1>c:\users\oriac\git\joc-2d\cscene.cpp(66): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 c:\program files (x86)\microsoft visual studio 10.0\vc\include\stdio.h(253) : see declaration of 'fscanf'
+         cGame.cpp
+     1>c:\users\oriac\git\joc-2d\cshoot.h(6): warning C4005: 'STEP_LENGTH' : macro redefinition
+                 c:\users\oriac\git\joc-2d\cbicho.h(7) : see previous definition of 'STEP_LENGTH'
+     1>c:\users\oriac\git\joc-2d\cgame.cpp(539): warning C4101: 'pos2' : unreferenced local variable
+         cBicho.cpp
+     1>c:\users\oriac\git\joc-2d\cbicho.cpp(462): warning C4101: 'alfa' : unreferenced local variable
+         Generating Code...
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -26,12 +49,12 @@
          All outputs are up-to-date.
        LinkEmbedManifest:
          All outputs are up-to-date.
-         2DEngine.vcxproj -> C:\Users\Javi\vj\vj o\Debug\2DEngine.exe
+         2DEngine.vcxproj -> C:\Users\Oriac\git\joc-2d\Debug\2DEngine.exe
        FinalizeBuildStatus:
          Deleting file "Debug\2DEngine.unsuccessfulbuild".
          Touching "Debug\2DEngine.lastbuildstate".
-     1>Done Building Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Oriac\git\joc-2d\2DEngine.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.95
+Time Elapsed 00:00:04.05

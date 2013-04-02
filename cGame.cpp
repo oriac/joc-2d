@@ -11,6 +11,7 @@ cGame::~cGame(void)
 }
 
 void cGame::NextLevel() {
+	++ ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
 	Scene.ResetCam();
@@ -19,6 +20,7 @@ void cGame::NextLevel() {
 
 bool cGame::Init()
 {
+	ActualLevel = 1;
 	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
 	Scene.ResetCam();
 	bool res=true;
@@ -45,6 +47,10 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_LEVEL01,"map1_1.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_LEVEL01_2,"map1_2.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_LEVEL02,"map2_1.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_LEVEL02_2,"map2_2.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
 	if(!res) return false;
@@ -520,7 +526,8 @@ void cGame::Render()
 	glLoadIdentity();
 	if(Player.GetHp()<=0&&Player2.GetHp()<=0)
 		glColor3f(1.0f,0.0f,0.0f);
-	Scene.Draw(Data.GetID(IMG_LEVEL01));
+	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
+	else Scene.Draw(Data.GetID(IMG_LEVEL02));
 	glColor3f(1.0f,1.0f,1.0f);
 	if(Player.isAlive())
 		Player.Draw(Data.GetID(IMG_PLAYER));

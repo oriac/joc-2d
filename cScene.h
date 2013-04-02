@@ -2,7 +2,7 @@
 
 #include "cTexture.h"
 
-#define SCENE_Xo		(2*TILE_SIZE)
+#define SCENE_Xo		(4*TILE_SIZE)
 #define SCENE_Yo		TILE_SIZE
 #define SCENE_WIDTH		32
 #define SCENE_HEIGHT	128
