@@ -1,12 +1,12 @@
-﻿Build started 4/1/2013 2:40:16 PM.
+﻿Build started 4/2/2013 1:22:25 PM.
      1>Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\2DEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt cGame.cpp
-         cGame.cpp
-     1>c:\users\javi\vj\vj o\cshoot.h(6): warning C4005: 'STEP_LENGTH' : macro redefinition
-                 c:\users\javi\vj\vj o\cbicho.h(7) : see previous definition of 'STEP_LENGTH'
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt cEnemy.cpp
+         cEnemy.cpp
+     1>c:\users\javi\vj\vj o\cenemy.cpp(233): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\javi\vj\vj o\cenemy.cpp(131): warning C4715: 'cEnemy::CaulculStep' : not all control paths return a value
        ManifestResourceCompile:
          All outputs are up-to-date.
        Link:
@@ -34,4 +34,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.15
+Time Elapsed 00:00:01.95

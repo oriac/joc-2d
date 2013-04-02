@@ -30,9 +30,9 @@ void cShoot::SetActive(bool b) {
 void cShoot::SetInitPos(int playerState,int x, int y) {
 	if(playerState == STATE_WALKLEFT||playerState == STATE_LOOKLEFT||playerState == STATE_SHOOT_LEFT)
 				SetPosition(x-(TILE_SIZE*2)+(x%4),y);
-			else if(playerState == STATE_LOOKUP)
+			else if(playerState == STATE_LOOKUP||playerState == STATE_WALKUP)
 				SetPosition(x-(x%4),y+(TILE_SIZE*2)-(y%4));
-			else if(playerState == STATE_LOOKDOWN)
+			else if(playerState == STATE_LOOKDOWN||playerState == STATE_WALKDOWN)
 				SetPosition(x,y-(TILE_SIZE*2)+(y%4));
 			else if(playerState == STATE_WALKRIGHT||playerState == STATE_LOOKRIGHT||playerState == STATE_SHOOT_RIGHT)
 				SetPosition(x+(TILE_SIZE*2)-(x%4),y);
@@ -69,7 +69,13 @@ void cShoot::ShootStep(int shootState, int *map) {
 				case STATE_LOOKUP:
 					MoveUp(map);
 					break;
+				case STATE_WALKUP:
+					MoveUp(map);
+					break;
 				case STATE_LOOKDOWN:
+					MoveDown(map);
+					break;
+				case STATE_WALKDOWN:
 					MoveDown(map);
 					break;
 				case STATE_DUPLEFT:

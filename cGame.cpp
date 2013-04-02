@@ -95,7 +95,7 @@ bool cGame::Init()
 
 
 	//Player initialization
-	res = Data.LoadImage(IMG_PLAYER,"bub.png",GL_RGBA);
+	res = Data.LoadImage(IMG_PLAYER,"player.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BULLET,"bullet3.png",GL_RGBA);
 	if(!res) return false;
