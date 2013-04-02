@@ -236,7 +236,7 @@ bool cGame::Process()
 		}
 	}
 	//input Player2
-	if(keys[119]||keys[115]||keys[97]||keys[100]) {
+	if(keys[119]||keys[120]||keys[97]||keys[100]) {
 		if(keys[97]) Player2.MoveLeft(Scene.GetMap());
 		if(keys[100]) Player2.MoveRight(Scene.GetMap());
 		if(keys[120]) {
@@ -501,6 +501,7 @@ void cGame::Render()
 		}
 	
 	}
+	glColor3f(1.0f,1.0f,1.0f);
 	for ( int i = 0; i < 10; ++i) {
 		if (Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_PLAYER));
 		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_PLAYER));	
