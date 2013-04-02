@@ -1,7 +1,7 @@
 
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {hp = 3;}
+cPlayer::cPlayer() {hp = 3;alive=true;points=0;}
 cPlayer::~cPlayer(){}
 
 void cPlayer::Draw(int tex_id)
@@ -65,4 +65,28 @@ int cPlayer::GetHp() {
 
 void cPlayer::LoseHp() {
 	hp--;
+}
+
+bool cPlayer::isAlive() {
+	return alive;
+}
+void cPlayer::AddPoints(int punts) {
+	points += punts;
+}
+
+string cPlayer::GetPoints() {
+	/*char aux[10];
+	sprintf(aux,"%d",&points);
+	string s(aux);
+	return s;*/
+	//std::string s = std::to_string(points);
+	//return s;
+	//int a = 10;
+	stringstream ss;
+	ss << points;
+	return ss.str();
+}
+
+void cPlayer::Dead() {
+	alive = false;
 }

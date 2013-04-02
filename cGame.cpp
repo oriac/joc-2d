@@ -191,113 +191,126 @@ bool cGame::Process()
 	
 	//Process Input
 	if(keys[27])	res=false;
-	if(keysSpecial[GLUT_KEY_UP]||keysSpecial[GLUT_KEY_DOWN]||keysSpecial[GLUT_KEY_LEFT]||keysSpecial[GLUT_KEY_RIGHT]) {
-		if(keysSpecial[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
-		if(keysSpecial[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
-		if(keysSpecial[GLUT_KEY_DOWN]) {
-			int x1,y1;
-			Player.GetPosition(&x1,&y1);
-			if(y1-Scene.getDesp() >= 0)
-				Player.MoveDown(Scene.GetMap());
+	if(Player.isAlive()) {
+		if(keysSpecial[GLUT_KEY_UP]||keysSpecial[GLUT_KEY_DOWN]||keysSpecial[GLUT_KEY_LEFT]||keysSpecial[GLUT_KEY_RIGHT]) {
+			if(keysSpecial[GLUT_KEY_LEFT]) Player.MoveLeft(Scene.GetMap());
+			if(keysSpecial[GLUT_KEY_RIGHT]) Player.MoveRight(Scene.GetMap());
+			if(keysSpecial[GLUT_KEY_DOWN]) {
+				int x1,y1;
+				Player.GetPosition(&x1,&y1);
+				if(y1-Scene.getDesp() >= 0)
+					Player.MoveDown(Scene.GetMap());
+			}
+			if(keysSpecial[GLUT_KEY_UP]) {
+				int x1,y1;
+				Player.GetPosition(&x1,&y1);
+				if(y1-Scene.getDesp() < GAME_HEIGHT-64)
+					Player.MoveUp(Scene.GetMap());
+			}
+			if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_RIGHT]) {
+				Player.SetState(STATE_DDOWNRIGHT);
+			}
+			else if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_LEFT]) {
+				Player.SetState(STATE_DDOWNLEFT);
+			}
+			if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_LEFT]) {
+				Player.SetState(STATE_DUPLEFT);
+			}
+			else if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_RIGHT]) {
+				Player.SetState(STATE_DUPRIGHT);
+			}
 		}
-		if(keysSpecial[GLUT_KEY_UP]) {
-			int x1,y1;
-			Player.GetPosition(&x1,&y1);
-			if(y1-Scene.getDesp() < GAME_HEIGHT-64)
-				Player.MoveUp(Scene.GetMap());
-		}
-		if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_RIGHT]) {
-			Player.SetState(STATE_DDOWNRIGHT);
-		}
-		else if(keysSpecial[GLUT_KEY_DOWN] && keysSpecial[GLUT_KEY_LEFT]) {
-			Player.SetState(STATE_DDOWNLEFT);
-		}
-		if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_LEFT]) {
-			Player.SetState(STATE_DUPLEFT);
-		}
-		else if(keysSpecial[GLUT_KEY_UP] && keysSpecial[GLUT_KEY_RIGHT]) {
-			Player.SetState(STATE_DUPRIGHT);
-		}
-	}
-	else Player.Stop();
-	if (keysSpecial[GLUT_KEY_INSERT]) {
+		else Player.Stop();
+		if (keysSpecial[GLUT_KEY_INSERT]) {
 		
-		endCd = glutGet(GLUT_ELAPSED_TIME);
-		shootCd = endCd - startCd;
-		if(shootCd > 250) {
-			startCd = glutGet(GLUT_ELAPSED_TIME);
+			endCd = glutGet(GLUT_ELAPSED_TIME);
+			shootCd = endCd - startCd;
+			if(shootCd > 250) {
+				startCd = glutGet(GLUT_ELAPSED_TIME);
 		
-			int x;
-			int y;
-			Player.Shoot(Scene.GetMap());
-			Player.GetPosition(&x,&y);
-			Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
-			Shoot[shootCount].SetState(Player.GetState());
-			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
-		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
-			Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
-			shootCount = (shootCount+1)%100;
-			PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
+				int x;
+				int y;
+				Player.Shoot(Scene.GetMap());
+				Player.GetPosition(&x,&y);
+				Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
+				Shoot[shootCount].SetState(Player.GetState());
+				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
+				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+				Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
+				shootCount = (shootCount+1)%100;
+				PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
 			
+			}
 		}
 	}
 	//input Player2
-	if(keys[119]||keys[120]||keys[97]||keys[100]) {
-		if(keys[97]) Player2.MoveLeft(Scene.GetMap());
-		if(keys[100]) Player2.MoveRight(Scene.GetMap());
-		if(keys[120]) {
-			int x1,y1;
-			Player2.GetPosition(&x1,&y1);
-			if(y1-Scene.getDesp() >= 0)
-				Player2.MoveDown(Scene.GetMap());
+	if(Player2.isAlive()) {
+		if(keys[119]||keys[120]||keys[97]||keys[100]) {
+			if(keys[97]) Player2.MoveLeft(Scene.GetMap());
+			if(keys[100]) Player2.MoveRight(Scene.GetMap());
+			if(keys[120]) {
+				int x1,y1;
+				Player2.GetPosition(&x1,&y1);
+				if(y1-Scene.getDesp() >= 0)
+					Player2.MoveDown(Scene.GetMap());
+			}
+			if(keys[119]) {
+				int x1,y1;
+				Player2.GetPosition(&x1,&y1);
+				if(y1-Scene.getDesp() < GAME_HEIGHT-64)
+					Player2.MoveUp(Scene.GetMap());
+			}
+			if(keys[120] && keys[100]) {
+				Player2.SetState(STATE_DDOWNRIGHT);
+			}
+			else if(keys[120] && keys[97]) {
+				Player2.SetState(STATE_DDOWNLEFT);
+			}
+			if(keys[119] && keys[97]) {
+				Player2.SetState(STATE_DUPLEFT);
+			}
+			else if(keys[119] && keys[100]) {
+				Player2.SetState(STATE_DUPRIGHT);
+			}
 		}
-		if(keys[119]) {
-			int x1,y1;
-			Player2.GetPosition(&x1,&y1);
-			if(y1-Scene.getDesp() < GAME_HEIGHT-64)
-				Player2.MoveUp(Scene.GetMap());
-		}
-		if(keys[120] && keys[100]) {
-			Player2.SetState(STATE_DDOWNRIGHT);
-		}
-		else if(keys[120] && keys[97]) {
-			Player2.SetState(STATE_DDOWNLEFT);
-		}
-		if(keys[119] && keys[97]) {
-			Player2.SetState(STATE_DUPLEFT);
-		}
-		else if(keys[119] && keys[100]) {
-			Player2.SetState(STATE_DUPRIGHT);
+		else Player2.Stop();
+		if (keysSpecial[GLUT_KEY_F4]) {
+		
+			end2Cd = glutGet(GLUT_ELAPSED_TIME);
+			shoot2Cd = end2Cd - start2Cd;
+			if(shoot2Cd > 250) {
+				start2Cd = glutGet(GLUT_ELAPSED_TIME);
+		
+				int x;
+				int y;
+				Player2.Shoot(Scene.GetMap());
+				Player2.GetPosition(&x,&y);
+				Shoot2[shootCount2].SetInitPos(Player2.GetState(),x,y);
+				Shoot2[shootCount2].SetState(Player2.GetState());
+				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
+				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
+				Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
+				shootCount2 = (shootCount2+1)%100;
+			}
 		}
 	}
-	else Player2.Stop();
-	if (keysSpecial[GLUT_KEY_F4]) {
-		
-		end2Cd = glutGet(GLUT_ELAPSED_TIME);
-		shoot2Cd = end2Cd - start2Cd;
-		if(shoot2Cd > 250) {
-			start2Cd = glutGet(GLUT_ELAPSED_TIME);
-		
-			int x;
-			int y;
-			Player2.Shoot(Scene.GetMap());
-			Player2.GetPosition(&x,&y);
-			Shoot2[shootCount2].SetInitPos(Player2.GetState(),x,y);
-			Shoot2[shootCount2].SetState(Player2.GetState());
-			//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
-		    //					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
-			Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
-			shootCount2 = (shootCount2+1)%100;
-		}
-	}
-
 	//Scroll
 	int x1,y1;
 	Player.GetPosition(&x1,&y1);
 	int x2,y2;
 	Player2.GetPosition(&x2,&y2);
-	if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
-	else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+	if (Player.GetHp()>0 && Player2.GetHp()>0) {
+		if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+		else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+	}
+	else if(Player2.GetHp() <= 0) {
+		if(y1-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+		else if(y1-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+	}
+	else if (Player.GetHp() <= 0) {
+		if(y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+		else if(y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+	}
 	
 	
 	//Enemy Logic
@@ -428,19 +441,21 @@ bool cGame::Process()
 			Shoot2[i].ShootStep(shootState,Scene.GetMap());
 			//cRect pos;
 			bool muerte = false;
-			for (int j = 0; j < 10; ++j) {
-				if(Enemy[j].IsAlive() && !muerte) {
+			for (int j = 0; j < 10 && !muerte; ++j) {
+				if(Enemy[j].IsAlive() ) {
 					//Enemy.GetArea(&pos);
 					Shoot2[i].GetArea(&pos);
 					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy[j].Collides2(&pos)) {
 						Enemy[j].kill();
 						Shoot2[i].SetActive(false);
+						Player.AddPoints(1000);
 						muerte = true;
 					}
 				}
 			}
-			for (int j = 0; j < 10; ++j) {
+			muerte = false;
+			for (int j = 0; j < 10 && !muerte; ++j) {
 				if(Enemy2[j].IsAlive()) {
 					//Enemy.GetArea(&pos);
 					Shoot2[i].GetArea(&pos);
@@ -448,6 +463,8 @@ bool cGame::Process()
 					if(Enemy2[j].Collides2(&pos)) {
 						Enemy2[j].kill();
 						Shoot2[i].SetActive(false);
+						Player.AddPoints(1000);
+						muerte = true;
 					}
 				}
 			}
@@ -473,6 +490,8 @@ bool cGame::Process()
 			}
 		}
 	}
+	if(Player.GetHp() <= 0) Player.Dead();
+	if(Player2.GetHp() <= 0) Player2.Dead();
 	return res;
 }
 
@@ -484,9 +503,11 @@ void cGame::Render()
 	glLoadIdentity();
 
 	Scene.Draw(Data.GetID(IMG_LEVEL01));
-	Player.Draw(Data.GetID(IMG_PLAYER));
+	if(Player.isAlive())
+		Player.Draw(Data.GetID(IMG_PLAYER));
 	//glColor3f(0.0f,0.0f,1.0f);
-	Player2.Draw(Data.GetID(IMG_PLAYER2));
+	if(Player2.isAlive())
+		Player2.Draw(Data.GetID(IMG_PLAYER2));
 	//glColor3f(1.0f,1.0f,1.0f);
 	
 	cRect pos2;
@@ -521,7 +542,7 @@ void cGame::Render()
 	glColor3f(1.0f,1.0f,1.0f);
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
-	Hud.DrawPoints(Data.GetID(IMG_FONT),"1337",Scene.getDesp());
+	Hud.DrawPoints(Data.GetID(IMG_FONT),Player.GetPoints(),Scene.getDesp());
 	if(Player.GetHp() <= 0 && Player2.GetHp() <= 0)Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
 	glutSwapBuffers();
 }
