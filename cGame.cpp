@@ -421,6 +421,7 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
+	Player2.GetTile(&x2,&y2);
 	if ( Scene.getDesp() > 800-80  && !this->firstTrap) {
 			firstTrap = true;
 			for ( int i = 0; i < 10; ++i) {
@@ -462,7 +463,10 @@ bool cGame::Process()
 			}
 
 		}
-		if (Enemy[i].IsAlive()) Enemy[i].SetStep(x,y,Scene.GetMap());
+		if (Enemy[i].IsAlive() && Player.isAlive() && Player2.isAlive() && i%2 == 0) Enemy[i].SetStep(x,y,Scene.GetMap());
+		else if (Enemy[i].IsAlive() && Player.isAlive() && Player2.isAlive() && i%2 != 0) Enemy[i].SetStep(x2,y2,Scene.GetMap());
+		else if (Enemy[i].IsAlive() && Player.isAlive() && !Player2.isAlive() ) Enemy[i].SetStep(x,y,Scene.GetMap());
+		else if (Enemy[i].IsAlive() && !Player.isAlive() && Player2.isAlive() ) Enemy[i].SetStep(x2,y2,Scene.GetMap());
 	}
 	endECd = glutGet(GLUT_ELAPSED_TIME);
 	shootECd = endECd - startECd;
