@@ -18,9 +18,16 @@ cSound::~cSound(void)
 void cSound::PlaySound(char *path,bool loop){
 	FMOD::Sound *s;
 	//system->createSound(path.c_str(), FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &s);
-	system->createStream("ff7.wav", 
-				  FMOD_SOFTWARE | FMOD_LOOP_NORMAL, 0, &s);
-	system->playSound(FMOD_CHANNEL_FREE, s, false, &channel1);
+	if(loop) {
+		system->createStream(path, 
+					  FMOD_SOFTWARE | FMOD_LOOP_NORMAL, 0, &s);
+		system->playSound(FMOD_CHANNEL_FREE, s, false, &channel1);
+	}
+	else {
+		system->createSound(path, FMOD_SOFTWARE, 0, 
+						&s);
+		system->playSound(FMOD_CHANNEL_FREE, s, false,&channel2 );
+	}
 }
 
 void cSound::Update() {
