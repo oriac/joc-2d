@@ -95,8 +95,22 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BLUEHEART,"blueheart.png",GL_RGBA);
 	if(!res) return false;
+	res = Data.LoadImage(IMG_ARMOR,"armadura.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_PLAYERARMOR,"playerfullArmor.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_NAKEDPLAYER,"nakedPlayer.png",GL_RGBA);
+	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
+
+	//Item init
+
+	for (int i = 0; i < 4; ++i) {
+		Item[i].SetTile(i*2+4, 7);
+		Item[i].SetActive(true);
+		Item[i].SetWidthHeight(32,32);
+	}
 
 	//Enemy initialization
 
@@ -613,6 +627,27 @@ bool cGame::Process()
 			}
 		}
 	}
+
+	if (Player.isAlive()) {
+		Player.GetArea(&pos);
+		for (int i = 0; i < 4; i++) {
+			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
+				Item[i].SetActive(false);
+				Player.WinHp();
+			}
+		}
+	}
+
+	if (Player2.isAlive()) {
+		Player2.GetArea(&pos);
+		for (int i = 0; i < 4; i++) {
+			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
+				Item[i].SetActive(false);
+				Player2.WinHp();
+			}
+		}
+	}
+
 	if(Player.GetHp() <= 0 && Player.isAlive()) {
 		Player.Dead();
 		//Player.SetTile(4,1);
@@ -637,13 +672,29 @@ void cGame::Render()
 	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
 	else Scene.Draw(Data.GetID(IMG_LEVEL02));
 	glColor3f(1.0f,1.0f,1.0f);
-	if(Player.isAlive() || Player.IsExplote())
-		Player.Draw(Data.GetID(IMG_PLAYER));
+
+	// Draw Player
+
+	if(Player.isAlive() || Player.IsExplote()) {
+		if ( Player.GetHp() > 3) Player.Draw(Data.GetID(IMG_PLAYERARMOR));
+		else if ( Player.GetHp() == 1) Player.Draw(Data.GetID(IMG_NAKEDPLAYER));
+		else Player.Draw(Data.GetID(IMG_PLAYER));
+	}
 	//glColor3f(0.0f,0.0f,1.0f);
+
+
+
 	if(Player2.isAlive() || Player2.IsExplote())
 		Player2.Draw(Data.GetID(IMG_PLAYER2));
 	//glColor3f(1.0f,1.0f,1.0f);
 	
+	//draw items
+
+	for (int i = 0; i < 4; i++) {
+		if (Item[i].IsActive()) Item[i].Draw(Data.GetID(IMG_ARMOR));
+	}
+
+
 	cRect pos2;
 	//collide = false;
 	//Player.GetArea(&pos2);

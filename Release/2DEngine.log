@@ -1,17 +1,17 @@
-﻿Build started 4/3/2013 8:15:05 PM.
-     1>Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" on node 2 (build target(s)).
+﻿Build started 04/04/2013 1:21:54.
+     1>Project "C:\Users\Oriac\git\joc-2d\2DEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\2DEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
          All outputs are up-to-date.
        Link:
          All outputs are up-to-date.
-         2DEngine.vcxproj -> C:\Users\Javi\vj\vj o\Release\2DEngine.exe
+         2DEngine.vcxproj -> C:\Users\Oriac\git\joc-2d\Release\2DEngine.exe
        FinalizeBuildStatus:
          Deleting file "Release\2DEngine.unsuccessfulbuild".
          Touching "Release\2DEngine.lastbuildstate".
-     1>Done Building Project "C:\Users\Javi\vj\vj o\2DEngine.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Oriac\git\joc-2d\2DEngine.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.09
+Time Elapsed 00:00:00.06

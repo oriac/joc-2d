@@ -6,6 +6,7 @@
 #include "cData.h"
 #include "cEnemy.h"
 #include "cHud.h"
+#include "cItem.h"
 #include "cSound.h"
 
 #define GAME_WIDTH	640
@@ -46,6 +47,7 @@ private:
 	cShoot EnemyShoot[500];
 	cEnemy Enemy[10];
 	cEnemy Enemy2[10];
+	cItem Item[4];
 	cHud Hud;
 	cSound Sound;
 	int shootCount;

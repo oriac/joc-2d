@@ -67,6 +67,10 @@ int cPlayer::GetHp() {
 	return hp;
 }
 
+void cPlayer::WinHp() {
+	hp++;
+}
+
 void cPlayer::LoseHp() {
 	hp--;
 }

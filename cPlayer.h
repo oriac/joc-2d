@@ -17,6 +17,7 @@ public:
 
 	void Draw(int tex_id);
 	int GetHp();
+	void WinHp();
 	void LoseHp();
 	bool isAlive();
 	void AddPoints(int punts);

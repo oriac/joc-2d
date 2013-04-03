@@ -44,6 +44,9 @@
     <ClCompile Include="cSound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cBicho.h">
@@ -77,6 +80,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cSound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

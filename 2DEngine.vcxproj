@@ -45,8 +45,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;C:\Users\Oriac\glut-3.7.6-bin;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;C:\Users\Oriac\glut-3.7.6-bin;$(LibraryPath)</LibraryPath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;$(LibraryPath)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -91,6 +91,7 @@
     <ClCompile Include="cData.cpp" />
     <ClCompile Include="cGame.cpp" />
     <ClCompile Include="cHud.cpp" />
+    <ClCompile Include="cItem.cpp" />
     <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cScene.cpp" />
     <ClCompile Include="cShoot.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="cData.h" />
     <ClInclude Include="cGame.h" />
     <ClInclude Include="cHud.h" />
+    <ClInclude Include="cItem.h" />
     <ClInclude Include="cPlayer.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cShoot.h" />
