@@ -67,4 +67,5 @@ private:
 	//int 
 	int ActualLevel;
 	float red;
+	bool p2IsPlaying;
 };

@@ -163,7 +163,8 @@ bool cGame::Init()
 	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
 
-	Player2.Respawn();
+	if(p2IsPlaying)Player2.Respawn();
+	//else Player2.Dead();
 	Player2.SetWidthHeight(32,32);
 	Player2.SetSpeed(1);
 	Player2.SetTile(16,1);
@@ -171,7 +172,7 @@ bool cGame::Init()
 	//startCd = -500;
 	//Player.SetWidthHeight(32,32);
 	Player2.SetState(STATE_LOOKRIGHT);
-
+	//Player2.Dead();
 	collide = false;
 	
 	//Shoots init
@@ -399,6 +400,14 @@ bool cGame::Process()
 		else if(Player2.GetState() == STATE_DDOWNRIGHT) Player2.SetState(STATE_WALKRIGHT);
 	}
 	if (keysSpecial[GLUT_KEY_F9]) Init();
+	if (keysSpecial[GLUT_KEY_F2]) {
+		if(!p2IsPlaying) {
+			p2IsPlaying = true;
+			Player.GetTile(&x,&y);
+			Player2.SetTile(x,y);
+			Player2.Respawn();
+		}
+	}
 	//Scroll
 	int x1,y1;
 	Player.GetPosition(&x1,&y1);
@@ -666,9 +675,13 @@ void cGame::Render()
 	
 	}
 	glColor3f(1.0f,1.0f,1.0f);
-	if(Scene.getDesp()>=1770 && ActualLevel == 1) {
+	if(Scene.getDesp()>=1760 && ActualLevel == 1) {
 		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
+	if(Scene.getDesp()>=1760 && ActualLevel == 2) {
+		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
+	}
+	if(!p2IsPlaying) Hud.DrawPlayer2Text(Data.GetID(IMG_FONT),Scene.getDesp());
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),Player.GetPoints(),Scene.getDesp());

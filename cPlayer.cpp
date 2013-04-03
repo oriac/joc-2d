@@ -1,7 +1,7 @@
 
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {hp = 3;alive=true;points=0; explote = false;}
+cPlayer::cPlayer() {hp = 0;alive=false;points=0; explote = false;}
 cPlayer::~cPlayer(){}
 
 void cPlayer::Draw(int tex_id)
