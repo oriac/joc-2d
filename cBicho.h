@@ -22,6 +22,7 @@
 #define STATE_DDOWNRIGHT	11
 #define STATE_WALKUP		12
 #define STATE_WALKDOWN		13
+#define STATE_EXPLOTE		14
 
 class cRect
 {
