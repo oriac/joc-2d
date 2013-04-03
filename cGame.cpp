@@ -11,7 +11,8 @@ cGame::~cGame(void)
 }
 
 void cGame::NextLevel() {
-	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	Sound.PlaySound("ff7.wav",true);
 	++ ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
@@ -61,7 +62,8 @@ void cGame::NextLevel() {
 bool cGame::Init()
 {
 	ActualLevel = 1;
-	PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
+	//PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
+	Sound.PlaySound("ff6.wav",true);
 	Scene.ResetCam();
 	bool res=true;
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -239,6 +241,7 @@ bool cGame::Process()
 	int x,y;
 	cRect pos;
 	
+	Sound.Update();
 	//Process Input
 	if(keys[27])	res=false;
 	if(Player.isAlive()) {
@@ -288,7 +291,8 @@ bool cGame::Process()
 				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
 				shootCount = (shootCount+1)%100;
-				PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
+				//PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
+				Sound.PlaySound("shoot.wav",false);
 			
 			}
 		}
@@ -529,24 +533,24 @@ bool cGame::Process()
 			EnemyShoot[i].ShootStep(shootState,Scene.GetMap());
 			//cRect pos;
 			EnemyShoot[i].GetArea(&pos);
-			if(Player.Collides2(&pos)) {
+			if(Player.isAlive() && Player.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
 				Player.LoseHp();
 			}
 		}
 		if(EnemyShoot[i].IsActive()) {
 			EnemyShoot[i].GetArea(&pos);
-			if(Player2.Collides2(&pos)) {
+			if(Player2.isAlive() && Player2.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
 				Player2.LoseHp();
 			}
 		}
 	}
-	if(Player.GetHp() <= 0) {
+	if(Player.GetHp() <= 0 && Player.isAlive()) {
 		Player.Dead();
 		//Player.SetTile(4,1);
 	}
-	if(Player2.GetHp() <= 0) {
+	if(Player2.GetHp() <= 0 && Player2.isAlive() ) {
 		Player2.Dead();
 		//Player2.SetTile(16,1);
 	}

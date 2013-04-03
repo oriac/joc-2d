@@ -27,6 +27,6 @@ public:
 private:
 	bool explote;
 	int hp;
-	int alive;
+	bool alive;
 	int points;
 };

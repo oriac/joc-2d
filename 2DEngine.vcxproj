@@ -94,6 +94,7 @@
     <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cScene.cpp" />
     <ClCompile Include="cShoot.cpp" />
+    <ClCompile Include="cSound.cpp" />
     <ClCompile Include="cTexture.cpp" />
     <ClCompile Include="cEnemy.cpp" />
     <ClCompile Include="GLUTMain.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="cPlayer.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="cShoot.h" />
+    <ClInclude Include="cSound.h" />
     <ClInclude Include="cTexture.h" />
     <ClInclude Include="cEnemy.h" />
     <ClInclude Include="Globals.h" />
