@@ -25,6 +25,8 @@ public:
 	void NextLevel();
 	void ReadKeyboard(unsigned char key, int x, int y, bool press);
 	void ReadKeyboardSpecial(unsigned char key, int x, int y, bool press);
+	void ReadKeyboardRelease(unsigned char key, int x, int y, bool press);
+	void ReadKeyboardSpecialRelease(unsigned char key, int x, int y, bool press);
 	void ReadMouse(int button, int state, int x, int y);
 	//Process
 	bool Process();
@@ -34,6 +36,8 @@ public:
 private:
 	unsigned char keys[256];
 	unsigned char keysSpecial[256];
+	unsigned char keysReleased[256];
+	unsigned char keysSpecialReleased[256];
 	cScene Scene;
 	cPlayer Player;
 	cPlayer Player2;
@@ -60,5 +64,7 @@ private:
 	int endCd, startCd, shootCd;
 	int end2Cd, start2Cd, shoot2Cd;
 	int endECd, startECd, shootECd;
+	//int 
 	int ActualLevel;
+	float red;
 };

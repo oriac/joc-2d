@@ -19,6 +19,7 @@ void cSound::PlaySound(char *path,bool loop){
 	FMOD::Sound *s;
 	//system->createSound(path.c_str(), FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &s);
 	if(loop) {
+		channel1->stop();
 		system->createStream(path, 
 					  FMOD_SOFTWARE | FMOD_LOOP_NORMAL, 0, &s);
 		system->playSound(FMOD_CHANNEL_FREE, s, false, &channel1);

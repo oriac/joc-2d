@@ -12,7 +12,7 @@ cGame::~cGame(void)
 
 void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
-	//Sound.PlaySound("ff7.wav",true);
+	Sound.PlaySound("ff7.wav",true);
 	++ ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
@@ -77,6 +77,7 @@ bool cGame::Init()
 	glEnable(GL_ALPHA_TEST);
 
 	//Scene initialization
+	red = 1.0f;
 	res = Data.LoadImage(IMG_HEART,"heart2.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_FONT,"font.png",GL_RGBA);
@@ -222,12 +223,26 @@ void cGame::Finalize()
 //Input
 void cGame::ReadKeyboard(unsigned char key, int x, int y, bool press)
 {
-	keys[key] = press;
+	keys[key] = true;
+	keysReleased[key] = false;
 }
 
 void cGame::ReadKeyboardSpecial(unsigned char key, int x, int y, bool press)
 {
-	keysSpecial[key] = press;
+	keysSpecial[key] = true;
+	keysSpecialReleased[key] = false;
+}
+
+void cGame::ReadKeyboardRelease(unsigned char key, int x, int y, bool press)
+{
+	keys[key] = false;
+	keysReleased[key] = true;
+}
+
+void cGame::ReadKeyboardSpecialRelease(unsigned char key, int x, int y, bool press)
+{
+	keysSpecial[key] = false;
+	keysSpecialReleased[key] = true;
 }
 
 void cGame::ReadMouse(int button, int state, int x, int y)
@@ -290,13 +305,36 @@ bool cGame::Process()
 				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
+				if(Shoot[shootCount].IsActive())Sound.PlaySound("shoot.wav",false);
 				shootCount = (shootCount+1)%100;
 				//PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
-				Sound.PlaySound("shoot.wav",false);
+				
 			
 			}
 		}
 	}
+	if(keysSpecialReleased[GLUT_KEY_UP]) {
+		keysSpecialReleased[GLUT_KEY_UP] = false;
+		if(Player.GetState() == STATE_DUPLEFT) Player.SetState(STATE_WALKLEFT);
+		else if(Player.GetState() == STATE_DUPRIGHT) Player.SetState(STATE_WALKRIGHT);
+	}
+	else if(keysSpecialReleased[GLUT_KEY_DOWN]) {
+		keysSpecialReleased[GLUT_KEY_DOWN] = false;
+		if(Player.GetState() == STATE_DDOWNLEFT) Player.SetState(STATE_WALKLEFT);
+		else if(Player.GetState() == STATE_DDOWNRIGHT) Player.SetState(STATE_WALKRIGHT);
+	}
+	else if(keysSpecialReleased[GLUT_KEY_RIGHT]) {
+		keysSpecialReleased[GLUT_KEY_RIGHT] = false;
+		if(Player.GetState() == STATE_DUPRIGHT) Player.SetState(STATE_WALKUP);
+		else if(Player.GetState() == STATE_DDOWNRIGHT) Player.SetState(STATE_WALKDOWN);
+	}
+	else if(keysSpecialReleased[GLUT_KEY_LEFT]) {
+		keysSpecialReleased[GLUT_KEY_LEFT] = false;
+		if(Player.GetState() == STATE_DDOWNLEFT) Player.SetState(STATE_WALKDOWN);
+		else if(Player.GetState() == STATE_DUPLEFT) Player.SetState(STATE_WALKUP);
+	}
+
+
 	//input Player2
 	if(Player2.isAlive()) {
 		if(keys[119]||keys[120]||keys[97]||keys[100]) {
@@ -344,9 +382,20 @@ bool cGame::Process()
 				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
+				if(Shoot[shootCount].IsActive())Sound.PlaySound("shoot.wav",false);
 				shootCount2 = (shootCount2+1)%100;
 			}
 		}
+	}
+	if(keysReleased[119]) {
+		keysReleased[119] = false;
+		if(Player2.GetState() == STATE_DUPLEFT) Player2.SetState(STATE_WALKLEFT);
+		else if(Player2.GetState() == STATE_DUPRIGHT) Player2.SetState(STATE_WALKRIGHT);
+	}
+	if(keysReleased[120]) {
+		keysReleased[120] = false;
+		if(Player2.GetState() == STATE_DDOWNLEFT) Player2.SetState(STATE_WALKLEFT);
+		else if(Player2.GetState() == STATE_DDOWNRIGHT) Player2.SetState(STATE_WALKRIGHT);
 	}
 	if (keysSpecial[GLUT_KEY_F9]) Init();
 	//Scroll
@@ -456,7 +505,7 @@ bool cGame::Process()
 	}
 
 	//Game Logic
-	if (y > 120) this->NextLevel();
+	if (Scene.getDesp()>=1770) this->NextLevel();
 	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
@@ -473,18 +522,22 @@ bool cGame::Process()
 					if(Enemy[j].Collides2(&pos)) {
 						Enemy[j].kill();
 						Shoot[i].SetActive(false);
+						Player.AddPoints(1000);
 						muerte = true;
 					}
 				}
 			}
-			for (int j = 0; j < 10; ++j) {
+			muerte = false;
+			for (int j = 0; j < 10 && !muerte; ++j) {
 				if(Enemy2[j].IsAlive()) {
 					//Enemy.GetArea(&pos);
 					Shoot[i].GetArea(&pos);
 					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy2[j].Collides2(&pos)) {
 						Enemy2[j].kill();
+						Player.AddPoints(1000);
 						Shoot[i].SetActive(false);
+						muerte = true;
 					}
 				}
 			}
@@ -563,8 +616,10 @@ void cGame::Render()
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	glLoadIdentity();
-	if(Player.GetHp()<=0&&Player2.GetHp()<=0)
-		glColor3f(1.0f,0.0f,0.0f);
+	if(Player.GetHp()<=0 && Player2.GetHp()<=0) {
+		glColor3f(1.0f,red,red);
+		if(red >= 0.0f)red -= 0.005;
+	}
 	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
 	else Scene.Draw(Data.GetID(IMG_LEVEL02));
 	glColor3f(1.0f,1.0f,1.0f);
@@ -604,6 +659,9 @@ void cGame::Render()
 			EnemyShoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
 	
+	}
+	if(Scene.getDesp()>=1750) {
+		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
 	glColor3f(1.0f,1.0f,1.0f);
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
