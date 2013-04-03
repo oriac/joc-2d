@@ -11,24 +11,59 @@ cGame::~cGame(void)
 }
 
 void cGame::NextLevel() {
+	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	++ ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
 	Scene.ResetCam();
 	Player.SetTile(4,1);
+	vector<Point> pat (4);
+	for (int i = 0; i < 10; ++i) {
+		Enemy[i].Init(true, pat);
+		Enemy[i].SetWidthHeight(32,32);
+		if ( i < 5) Enemy[i].SetTile((i*4)%32,36);
+		else Enemy[i].SetTile((i*2)%32,72);
+		Enemy[i].SetSpeed(1);
+
+	}
+	
+	Point p1,p2,p3,p4;
+	p1.tilex = 29;
+	p1.tiley = 6;
+	p2.tilex = 29;
+	p2.tiley= 3;
+	p3.tilex = 4;
+	p3.tiley = 3;
+	p4.tilex = 4;
+	p4.tiley = 6;
+	for ( int i = 0; i < 10; i++) {
+		int aux;
+		if ( i < 5 ) aux = 46;
+		else if ( i >= 5) aux = 120;
+		p1.tiley = aux+2;
+		p2.tiley = aux;
+		p3.tiley = aux;
+		p4.tiley = aux+2;
+		pat[0] = p1;
+		pat[1] = p2;
+		pat[2] = p3;
+		pat[3] = p4;
+		Enemy2[i].Init(false,pat);
+		Enemy2[i].SetWidthHeight(32,32);
+		Enemy2[i].SetTile(4+(i*2),aux);
+		Enemy2[i].SetSpeed(1);
+	}
+	firstPatrol = false;
+	firstTrap = false;
+	secondPatrol = false;
 }
 
 bool cGame::Init()
 {
 	ActualLevel = 1;
-	PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
+	PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
 	Scene.ResetCam();
 	bool res=true;
-	this->firstTrap = false;
-	bool firstPatrol = false;
-	bool secondPatrol = false;
-	//Disparo = false;
-	//Graphics initialization
 	startTime = glutGet(GLUT_ELAPSED_TIME);
 	glClearColor(0.0f,0.0f,0.0f,0.0f);
 	glMatrixMode(GL_PROJECTION);
@@ -509,11 +544,11 @@ bool cGame::Process()
 	}
 	if(Player.GetHp() <= 0) {
 		Player.Dead();
-		Player.SetTile(4,1);
+		//Player.SetTile(4,1);
 	}
 	if(Player2.GetHp() <= 0) {
 		Player2.Dead();
-		Player2.SetTile(16,1);
+		//Player2.SetTile(16,1);
 	}
 	return res;
 }
@@ -529,10 +564,10 @@ void cGame::Render()
 	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
 	else Scene.Draw(Data.GetID(IMG_LEVEL02));
 	glColor3f(1.0f,1.0f,1.0f);
-	if(Player.isAlive())
+	if(Player.isAlive() || Player.IsExplote())
 		Player.Draw(Data.GetID(IMG_PLAYER));
 	//glColor3f(0.0f,0.0f,1.0f);
-	if(Player2.isAlive())
+	if(Player2.isAlive() || Player2.IsExplote())
 		Player2.Draw(Data.GetID(IMG_PLAYER2));
 	//glColor3f(1.0f,1.0f,1.0f);
 	
@@ -555,8 +590,9 @@ void cGame::Render()
 	}
 	glColor3f(1.0f,1.0f,1.0f);
 	for ( int i = 0; i < 10; ++i) {
-		if (Enemy2[i].IsAlive())Enemy2[i].Draw(Data.GetID(IMG_ENEMY2));
-		if (Enemy[i].IsAlive())Enemy[i].Draw(Data.GetID(IMG_ENEMY));	
+		if (Enemy2[i].IsAlive() || Enemy2[i].IsExplote())
+			Enemy2[i].Draw(Data.GetID(IMG_ENEMY2));
+		if (Enemy[i].IsAlive() || Enemy[i].IsExplote())Enemy[i].Draw(Data.GetID(IMG_ENEMY));	
 	}
 	for(int i=0;i<500;i++) {
 		if(EnemyShoot[i].IsActive()) {

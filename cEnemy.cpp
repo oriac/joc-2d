@@ -8,10 +8,12 @@ cEnemy::cEnemy()
 cEnemy::~cEnemy(){}
 void cEnemy::Init(bool ismelee, vector<Point> pat)
 {
+
 	this->patrulla = pat;
 	this->melee = ismelee;
 	this->PointActual = 0;
 	alive = false;
+	explote = false;
 }
 void cEnemy::Draw(int tex_id)
 {	
@@ -61,6 +63,10 @@ void cEnemy::Draw(int tex_id)
 		case STATE_DDOWNRIGHT:	xo = 0.0f + (GetFrame()*0.25f); yo = 0.25f;
 								NextFrame(3);
 								break;
+		case STATE_EXPLOTE:	xo = 0.75f; yo = 0.25f + (GetFrame()*0.25f);
+								if (yo == 1.0f) explote = false;
+								NextFrame(4);
+								break;
 	}
 	xf = xo + 0.25f;
 	yf = yo - 0.25f;
@@ -78,9 +84,16 @@ void cEnemy::Active()
 	alive = true;
 }
 
+bool cEnemy::IsExplote()
+{
+	return explote;
+}
+
 void cEnemy::kill()
 {
+	explote = true;
 	alive = false;
+	cBicho::SetState(STATE_EXPLOTE);
 }
 
 int cEnemy::CaulculStep(int x, int y) {

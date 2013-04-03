@@ -33,8 +33,10 @@ public:
 	void Active();
 	void kill();
 	bool IsAlive();
+	bool IsExplote();
 	int CaulculStep(int x, int y);
 private:
+	bool explote;
 	bool alive;
 	bool melee;
 	int nextStep;

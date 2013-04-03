@@ -1,7 +1,7 @@
 
 #include "cPlayer.h"
 
-cPlayer::cPlayer() {hp = 3;alive=true;points=0;}
+cPlayer::cPlayer() {hp = 3;alive=true;points=0; explote = false;}
 cPlayer::~cPlayer(){}
 
 void cPlayer::Draw(int tex_id)
@@ -52,6 +52,10 @@ void cPlayer::Draw(int tex_id)
 		case STATE_DDOWNRIGHT:	xo = 0.0f + (GetFrame()*0.25f); yo = 0.25f;
 								NextFrame(3);
 								break;
+		case STATE_EXPLOTE:		xo = 0.75f; yo = 0.25f + (GetFrame()*0.25f);
+								if (yo == 1.0f) explote = false;
+								NextFrame(4);
+								break;
 	}
 	xf = xo + 0.25f;
 	yf = yo - 0.25f;
@@ -69,6 +73,9 @@ void cPlayer::LoseHp() {
 
 bool cPlayer::isAlive() {
 	return alive;
+}
+bool cPlayer::IsExplote() {
+	return explote;
 }
 void cPlayer::AddPoints(int punts) {
 	points += punts;
@@ -94,5 +101,7 @@ string cPlayer::GetPoints() {
 }
 
 void cPlayer::Dead() {
+	cBicho::SetState(STATE_EXPLOTE);
+	explote = true;
 	alive = false;
 }

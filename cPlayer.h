@@ -22,8 +22,10 @@ public:
 	void AddPoints(int punts);
 	void Dead();
 	void Respawn();
+	bool IsExplote();
 	string GetPoints();
 private:
+	bool explote;
 	int hp;
 	int alive;
 	int points;
