@@ -12,7 +12,7 @@ cGame::~cGame(void)
 
 void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
-	Sound.PlaySound("ff7.wav",true);
+	//Sound.PlaySound("ff7.wav",true);
 	++ ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
