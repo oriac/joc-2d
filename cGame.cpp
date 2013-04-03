@@ -12,6 +12,7 @@ cGame::~cGame(void)
 
 void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+	Sleep(2000);
 	Sound.PlaySound("ff7.wav",true);
 	++ ActualLevel;
 	bool result = false;
@@ -22,7 +23,7 @@ void cGame::NextLevel() {
 	for (int i = 0; i < 10; ++i) {
 		Enemy[i].Init(true, pat);
 		Enemy[i].SetWidthHeight(32,32);
-		if ( i < 5) Enemy[i].SetTile((i*4)%32,36);
+		if (i < 5) Enemy[i].SetTile((i*4)%32,36);
 		else Enemy[i].SetTile((i*2)%32,72);
 		Enemy[i].SetSpeed(1);
 
@@ -420,13 +421,13 @@ bool cGame::Process()
 	
 	//Enemy Logic
 	Player.GetTile(&x,&y);
-	if ( y > 50  && !this->firstTrap) {
+	if ( Scene.getDesp() > 800-80  && !this->firstTrap) {
 			firstTrap = true;
 			for ( int i = 0; i < 10; ++i) {
 				Enemy[i].Active();
 			}
 	}
-	if ( y > 90 && !this->secondPatrol) {
+	if ( Scene.getDesp() > 1440-80 && !this->secondPatrol) {
 		for ( int i = 5; i < 10; ++i) {
 				Enemy2[i].Active();
 				Enemy[i].Active();
@@ -434,7 +435,7 @@ bool cGame::Process()
 		}
 		secondPatrol = true;
 	}
-	if ( y > 20 && !this->firstPatrol) {
+	if ( Scene.getDesp() > 320-80 && !this->firstPatrol) {
 		for ( int i = 0; i < 5; ++i) {
 				Enemy2[i].Active();
 				//if ( i > 2 &&  i < 5) Enemy2[i].Active();
@@ -660,10 +661,10 @@ void cGame::Render()
 		}
 	
 	}
-	if(Scene.getDesp()>=1750) {
+	glColor3f(1.0f,1.0f,1.0f);
+	if(Scene.getDesp()>=1770 && ActualLevel == 1) {
 		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
-	glColor3f(1.0f,1.0f,1.0f);
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),Player.GetPoints(),Scene.getDesp());
