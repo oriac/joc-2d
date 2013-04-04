@@ -12,7 +12,7 @@ cGame::~cGame(void)
 
 void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
-	Sleep(2000);
+	Sleep(6000);
 	Sound.PlaySound("ff7.wav",true);
 	if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive())ActualLevel = 3;
 	else ++ActualLevel;
@@ -578,7 +578,10 @@ bool cGame::Process()
 	}
 
 	//Game Logic
-	if (Scene.getDesp()>=1800) this->NextLevel();
+	if (Scene.getDesp()>=1800) {
+		Sound.PlaySound("Victory.ogg",true);
+		this->NextLevel();
+	}
 	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
@@ -808,13 +811,13 @@ void cGame::Render()
 	if(Scene.getDesp()>=1798 && ActualLevel == 1) {
 		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
-	if(Scene.getDesp()>=1798 && ActualLevel == 2 && (!Player.isAlive() || !Player2.isAlive())) {
+	else if(Scene.getDesp()>=1798 && ActualLevel == 2 && (!Player.isAlive() || !Player2.isAlive())) {
 		Hud.DrawGameComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
-	else {
-
+	else if(Scene.getDesp()>=1798 && ActualLevel == 2 && Player.isAlive() && Player2.isAlive()) {
+		Hud.DrawPrepareToFight(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
-	Hud.DrawPrepareToFight(Data.GetID(IMG_FONT),Scene.getDesp());
+	
 	if(!p2IsPlaying) Hud.DrawPlayer2Text(Data.GetID(IMG_FONT),Scene.getDesp());
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
