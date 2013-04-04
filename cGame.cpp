@@ -14,11 +14,13 @@ void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	Sleep(2000);
 	Sound.PlaySound("ff7.wav",true);
-	++ ActualLevel;
+	if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive())ActualLevel = 3;
+	else ++ActualLevel;
 	bool result = false;
 	result = Scene.LoadLevel(2);
 	Scene.ResetCam();
 	Player.SetTile(4,1);
+	Player2.SetTile(7,1);
 	vector<Point> pat (4);
 	for (int i = 0; i < 10; ++i) {
 		Enemy[i].Init(true, pat);
@@ -58,6 +60,25 @@ void cGame::NextLevel() {
 	firstPatrol = false;
 	firstTrap = false;
 	secondPatrol = false;
+		//Shoots init
+	for (int i = 0; i < 100; ++i) {
+		Shoot[i].SetWidthHeight(16,16);
+		Shoot[i].SetSpeed(2);
+		Shoot[i].SetActive(false);
+	}
+	for (int i = 0; i < 100; ++i) {
+		Shoot2[i].SetWidthHeight(16,16);
+		Shoot2[i].SetSpeed(2);
+		Shoot2[i].SetActive(false);
+	}
+	for (int i = 0; i < 500; ++i) {
+		EnemyShoot[i].SetWidthHeight(16,16);
+		EnemyShoot[i].SetSpeed(2);
+		EnemyShoot[i].SetActive(false);
+	}
+	shootCount = 0;
+	shootCount2 = 0;
+	enemyShootCount = 0;
 }
 
 bool cGame::Init()
@@ -103,6 +124,12 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
+	res = Data.LoadImage(IMG_PLAYER2ARMOR,"player2fullArmor.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_NAKEDPLAYER2,"nakedPlayer2.png",GL_RGBA);
+	if(!res) return false;
+	res = Scene.LoadLevel(1);
+
 
 	//Item init
 
@@ -701,10 +728,13 @@ void cGame::Render()
 	}
 	//glColor3f(0.0f,0.0f,1.0f);
 
+	// Draw Player 2
 
-
-	if(Player2.isAlive() || Player2.IsExplote())
-		Player2.Draw(Data.GetID(IMG_PLAYER2));
+	if(Player2.isAlive() || Player2.IsExplote()) {
+		if ( Player2.GetHp() > 3) Player2.Draw(Data.GetID(IMG_PLAYER2ARMOR));
+		else if ( Player2.GetHp() == 1) Player2.Draw(Data.GetID(IMG_NAKEDPLAYER2));
+		else Player2.Draw(Data.GetID(IMG_PLAYER2));
+	}
 	//glColor3f(1.0f,1.0f,1.0f);
 	
 	//draw items
