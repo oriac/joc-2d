@@ -83,7 +83,7 @@ bool cGame::Init()
 	if(!res) return false;
 	res = Data.LoadImage(IMG_FONT,"font.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL01,"map1_1.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL01,"maptest.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_LEVEL01_2,"map1_2.png",GL_RGBA);
 	if(!res) return false;
