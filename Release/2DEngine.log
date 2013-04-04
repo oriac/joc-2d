@@ -1,4 +1,4 @@
-﻿Build started 04/04/2013 1:21:54.
+﻿Build started 04/04/2013 17:51:08.
      1>Project "C:\Users\Oriac\git\joc-2d\2DEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Release\2DEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
@@ -14,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.06
+Time Elapsed 00:00:00.31
