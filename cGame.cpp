@@ -198,12 +198,12 @@ bool cGame::Init()
 	for (int i = 0; i < 100; ++i) {
 		Shoot2[i].SetWidthHeight(16,16);
 		Shoot2[i].SetSpeed(2);
-		Shoot[i].SetActive(false);
+		Shoot2[i].SetActive(false);
 	}
 	for (int i = 0; i < 500; ++i) {
 		EnemyShoot[i].SetWidthHeight(16,16);
 		EnemyShoot[i].SetSpeed(2);
-		Shoot[i].SetActive(false);
+		EnemyShoot[i].SetActive(false);
 	}
 	shootCount = 0;
 	shootCount2 = 0;
@@ -398,7 +398,7 @@ bool cGame::Process()
 				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
-				if(Shoot[shootCount].IsActive())Sound.PlaySound("shoot.wav",false);
+				if(Shoot2[shootCount2].IsActive())Sound.PlaySound("shoot.wav",false);
 				shootCount2 = (shootCount2+1)%100;
 			}
 		}
@@ -552,6 +552,7 @@ bool cGame::Process()
 						Shoot[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
+						Sound.PlaySound("explosion.aiff",false);
 					}
 				}
 			}
@@ -566,6 +567,7 @@ bool cGame::Process()
 						Player.AddPoints(1000);
 						Shoot[i].SetActive(false);
 						muerte = true;
+						Sound.PlaySound("explosion.aiff",false);
 					}
 				}
 			}
