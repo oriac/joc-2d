@@ -17,8 +17,9 @@ void cGame::NextLevel() {
 	if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive())ActualLevel = 3;
 	else ++ActualLevel;
 	bool result = false;
-	result = Scene.LoadLevel(2);
+	result = Scene.LoadLevel(ActualLevel);	
 	Scene.ResetCam();
+	if (ActualLevel == 3) Scene.Scroll(80);
 	Player.SetTile(4,1);
 	Player2.SetTile(7,1);
 	vector<Point> pat (4);
@@ -111,6 +112,8 @@ bool cGame::Init()
 	res = Data.LoadImage(IMG_LEVEL02,"map2_1.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_LEVEL02_2,"map2_2.png",GL_RGBA);
+	if(!res) return false;
+	res = Data.LoadImage(IMG_LEVEL03,"map3.png",GL_RGBA);
 	if(!res) return false;
 	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
 	if(!res) return false;
@@ -235,7 +238,6 @@ bool cGame::Init()
 	shootCount = 0;
 	shootCount2 = 0;
 	enemyShootCount = 0;
-
 
 	return res;
 }
@@ -747,9 +749,10 @@ void cGame::Render()
 		glColor3f(1.0f,red,red);
 		if(red >= 0.0f)red -= 0.005;
 	}
+	// Draw Scena
 	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
 	else if (ActualLevel == 2)  Scene.Draw(Data.GetID(IMG_LEVEL02));
-	else Scene.Draw2(Data.GetID(IMG_LEVEL02));
+	else Scene.Draw2(Data.GetID(IMG_LEVEL03));
 	glColor3f(1.0f,1.0f,1.0f);
 
 	// Draw Player
