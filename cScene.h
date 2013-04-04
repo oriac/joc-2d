@@ -21,6 +21,7 @@ public:
 
 	bool LoadLevel(int level);
 	void Draw(int tex_id);
+	void Draw2(int tex_id);
 	int *GetMap();
 	void Scroll(int i);
 	void ResetCam();

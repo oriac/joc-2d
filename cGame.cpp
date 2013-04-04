@@ -636,6 +636,14 @@ bool cGame::Process()
 				Player.WinHp();
 			}
 		}
+		if (ActualLevel == 3) {
+			for (int i = 0; i < 100; i++) {
+				if (Shoot2[i].IsActive() && Shoot2[i].Collides2(&pos)) {
+					Player.LoseHp();
+					Shoot2[i].SetActive(false);
+				}
+			}
+		}
 	}
 
 	if (Player2.isAlive()) {
@@ -644,6 +652,14 @@ bool cGame::Process()
 			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
 				Item[i].SetActive(false);
 				Player2.WinHp();
+			}
+		}
+		if (ActualLevel == 3) {
+			for (int i = 0; i < 100; i++) {
+				if (Shoot[i].IsActive() && Shoot[i].Collides2(&pos)) {
+					Shoot[i].SetActive(false);
+					Player2.LoseHp();
+				}
 			}
 		}
 	}
@@ -670,7 +686,8 @@ void cGame::Render()
 		if(red >= 0.0f)red -= 0.005;
 	}
 	if ( ActualLevel == 1) Scene.Draw(Data.GetID(IMG_LEVEL01));
-	else Scene.Draw(Data.GetID(IMG_LEVEL02));
+	else if (ActualLevel == 2)  Scene.Draw(Data.GetID(IMG_LEVEL02));
+	else Scene.Draw2(Data.GetID(IMG_LEVEL02));
 	glColor3f(1.0f,1.0f,1.0f);
 
 	// Draw Player

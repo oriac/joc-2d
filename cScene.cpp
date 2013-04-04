@@ -102,6 +102,29 @@ void cScene::Draw(int tex_id)
 	
 	glDisable(GL_TEXTURE_2D);
 }
+
+void cScene::Draw2(int tex_id)
+{
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D,tex_id);
+	glTranslatef(0., -desplazament, 0.);
+	int px, py;
+	//glCallList(id_DL);
+	//glBindTexture(GL_TEXTURE_2D,tex_id);
+	px=SCENE_Xo;
+	py=SCENE_Yo+((32)*TILE_SIZE);
+	glBegin(GL_QUADS);	
+		glTexCoord2f(0,0);	glVertex2i(px, py);
+		glTexCoord2f(1,0);	glVertex2i(px+32*16,py);
+		glTexCoord2f(1,1);	glVertex2i(px+32*16,SCENE_Yo);
+		glTexCoord2f(0,1);	glVertex2i(px,SCENE_Yo);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D,tex_id+1);
+	//glBindTexture(GL_TEXTURE_2D,0);
+	//glCallList(id_DL);
+	
+	glDisable(GL_TEXTURE_2D);
+}
 int* cScene::GetMap()
 {
 	return map;
