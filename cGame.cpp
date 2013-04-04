@@ -13,15 +13,41 @@ cGame::~cGame(void)
 void cGame::NextLevel() {
 	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	Sleep(6000);
-	Sound.PlaySound("ff7.wav",true);
-	if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive())ActualLevel = 3;
-	else ++ActualLevel;
+	if (ActualLevel ==1) {
+		++ActualLevel;
+		Sound.PlaySound("ff7.wav",true);
+		for (int i = 0; i < 4; ++i) {
+			if (i ==0) Item[i].SetTile(23,27);
+			else if (i ==1) Item[i].SetTile(15,65);
+			else if (i ==2) Item[i].SetTile(26,91);
+			else Item[i].SetTile(13,115);
+			Item[i].SetActive(true);
+		}
+		Player.SetTile(4,1);
+		Player2.SetTile(7,1);
+	}
+	else if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive()) {
+		Sound.PlaySoundA("pvp.mp3",true);
+		ActualLevel = 3;
+		for (int i = 0; i < 4; ++i) {
+			if (i ==0) Item[i].SetTile(17,16);
+			else if (i ==1) Item[i].SetTile(13,16);
+			else if (i ==2) Item[i].SetTile(3,3);
+			else Item[i].SetTile(27,3);
+			Item[i].SetActive(true);
+		}
+		Player.SetTile(8,20);
+		Player2.SetTile(22,20);
+	}
+	else if(ActualLevel == 2) {
+		ActualLevel =1;
+		this->Init();
+	}
 	bool result = false;
 	result = Scene.LoadLevel(ActualLevel);	
 	Scene.ResetCam();
 	if (ActualLevel == 3) Scene.Scroll(80);
-	Player.SetTile(4,1);
-	Player2.SetTile(7,1);
+
 	vector<Point> pat (4);
 	for (int i = 0; i < 10; ++i) {
 		Enemy[i].Init(true, pat);
@@ -137,7 +163,11 @@ bool cGame::Init()
 	//Item init
 
 	for (int i = 0; i < 4; ++i) {
-		Item[i].SetTile(i*2+4, 7);
+		if (i ==0) Item[i].SetTile(24,41);
+		else if (i ==1) Item[i].SetTile(24,65);
+		else if (i ==2) Item[i].SetTile(6,97);
+		else Item[i].SetTile(16,120);
+		//Item[i].SetTile(i*2+4, 7);
 		Item[i].SetActive(true);
 		Item[i].SetWidthHeight(32,32);
 	}
@@ -509,7 +539,7 @@ bool cGame::Process()
 	}
 
 	for (int i = 0; i < 10; ++i) {
-		if(Enemy[i].IsAlive()) {
+		if(Enemy[i].IsAlive() && Player.isAlive()) {
 			//cRect pos;
 			Player.GetArea(&pos);
 			if(Enemy[i].Collides2(&pos)) {
@@ -519,7 +549,7 @@ bool cGame::Process()
 			}
 
 		}
-		if(Enemy[i].IsAlive()) {
+		if(Enemy[i].IsAlive() && Player2.isAlive()) {
 			//cRect pos;
 			Player2.GetArea(&pos);
 			if(Enemy[i].Collides2(&pos)) {
@@ -679,7 +709,7 @@ bool cGame::Process()
 			EnemyShoot[i].GetArea(&pos);
 			if(Player2.isAlive() && Player2.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
-				if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+				if(Player2.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
 				else Sound.PlaySound("femHurt.mp3",false,0.5);
 				Player2.LoseHp();
 			}
@@ -721,7 +751,7 @@ bool cGame::Process()
 				if (Shoot[i].IsActive() && Shoot[i].Collides2(&pos)) {
 					Shoot[i].SetActive(false);
 					Player2.LoseHp();
-					if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+					if(Player2.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
 					else Sound.PlaySound("femHurt.mp3",false,0.5);
 				}
 			}

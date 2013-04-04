@@ -121,7 +121,7 @@ void cScene::Draw2(int tex_id)
 	glEnd();
 	//glBindTexture(GL_TEXTURE_2D,tex_id+1);
 	//glBindTexture(GL_TEXTURE_2D,0);
-	glCallList(id_DL);
+	//glCallList(id_DL);
 	
 	glDisable(GL_TEXTURE_2D);
 }
