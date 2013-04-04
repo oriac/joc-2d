@@ -45,8 +45,8 @@
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;C:\Users\Oriac\glut-3.7.6-bin;$(IncludePath)</IncludePath>
     <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\Javi\vj\vj o;C:\Windows\System32;C:\Users\Oriac\glut-3.7.6-bin;$(LibraryPath)</LibraryPath>
-    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(IncludePath)</IncludePath>
-    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(LibraryPath)</LibraryPath>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Javi\vj\vj o;C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(IncludePath)</IncludePath>
+    <LibraryPath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\Javi\vj\vj o;C:\Users\Oriac\glut-3.7.6-bin;C:\Windows\System32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

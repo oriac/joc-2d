@@ -60,8 +60,8 @@ void cHud::DrawBlueHearts(int tex_id,int life, int d)
 void cHud::DrawPoints(int tex_id,string points, int d) {
 	int step_x,step_y;
 	float tx,ty;
-	tx = 1./10.;
-	ty = 1./6.;
+	tx = 1./16.;
+	ty = 1./8.;
 	//writing punts:
 	string aux = "punts";
 	int n = aux.size();
@@ -86,24 +86,53 @@ void cHud::DrawPoints(int tex_id,string points, int d) {
 void cHud::DrawPlayer2Text(int tex_id, int d) {
 	int step_x,step_y;
 	float tx,ty;
-	tx = 1./10.;
-	ty = 1./6.;
+	tx = 1./16.;
+	ty = 1./8.;
 	//writing punts:
-	string aux = "pressftoplay";
+	string aux = "press";
 	int n = aux.size();
 	for(int i=0;i<n;i++) {
 		step_x = (aux[i]-'a')+33;
 		step_y = step_x/10;
 		step_x = step_x%10;
-		Draw(tex_id,tx,ty,step_x,step_y,368.+16.*i,450+d);
+		Draw(tex_id,tx,ty,step_x,step_y,400.+16.*i,450+d);
+	}
+	//f
+		step_x = ('f'-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw(tex_id,tx,ty,step_x,step_y,400.+88.,450+d);
+	
+	//2
+		step_x = ('2'-'0')+16;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw(tex_id,tx,ty,step_x,step_y,400.+104.,450+d);
+	//to
+	aux = "to";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw(tex_id,tx,ty,step_x,step_y,400.+128.+16.*i,450+d);
+	}
+	//play
+	aux = "play";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw(tex_id,tx,ty,step_x,step_y,400.+168.+16.*i,450+d);
 	}
 }
 
 void cHud::DrawGameOver(int tex_id, int d) {
 	int step_x,step_y;
 	float tx,ty;
-	tx = 1./10.;
-	ty = 1./6.;
+	tx = 1./16.;
+	ty = 1./8.;
 	//writing punts:
 	string aux = "game";
 	int n = aux.size();
@@ -126,8 +155,8 @@ void cHud::DrawGameOver(int tex_id, int d) {
 void cHud::DrawLevelComplete(int tex_id, int d) {
 	int step_x,step_y;
 	float tx,ty;
-	tx = 1./10.;
-	ty = 1./6.;
+	tx = 1./16.;
+	ty = 1./8.;
 	//writing punts:
 	string aux = "level";
 	int n = aux.size();
@@ -149,8 +178,8 @@ void cHud::DrawLevelComplete(int tex_id, int d) {
 void cHud::DrawGameComplete(int tex_id, int d) {
 	int step_x,step_y;
 	float tx,ty;
-	tx = 1./10.;
-	ty = 1./6.;
+	tx = 1./16.;
+	ty = 1./8.;
 	//writing punts:
 	string aux = "game";
 	int n = aux.size();
@@ -167,6 +196,39 @@ void cHud::DrawGameComplete(int tex_id, int d) {
 		step_y = step_x/10;
 		step_x = step_x%10;
 		Draw50(tex_id,tx,ty,step_x,step_y,140.+50.*i,190+d);
+	}
+}
+
+
+void cHud::DrawPrepareToFight(int tex_id, int d) {
+	int step_x,step_y;
+	float tx,ty;
+	tx = 1./16.;
+	ty = 1./8.;
+	//writing punts:
+	string aux = "prepare";
+	int n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,160.+50.*i,240+d);
+	}
+	aux = "to";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,152.+50.*i,190+d);
+	}
+	aux = "fight";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,268.+50.*i,190+d);
 	}
 }
 
@@ -201,3 +263,5 @@ void cHud::Draw50(int tex_id, float tx,float ty, int step_x,int step_y,float tra
 			glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 }
+
+

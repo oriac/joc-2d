@@ -435,14 +435,24 @@ bool cGame::Process()
 		if(Player2.GetState() == STATE_DUPLEFT) Player2.SetState(STATE_WALKLEFT);
 		else if(Player2.GetState() == STATE_DUPRIGHT) Player2.SetState(STATE_WALKRIGHT);
 	}
-	if(keysReleased[120]) {
+	else if(keysReleased[120]) {
 		keysReleased[120] = false;
 		if(Player2.GetState() == STATE_DDOWNLEFT) Player2.SetState(STATE_WALKLEFT);
 		else if(Player2.GetState() == STATE_DDOWNRIGHT) Player2.SetState(STATE_WALKRIGHT);
 	}
+	else if(keysReleased[100]) {
+		keysReleased[100] = false;
+		if(Player2.GetState() == STATE_DUPRIGHT) Player2.SetState(STATE_WALKUP);
+		else if(Player2.GetState() == STATE_DDOWNRIGHT) Player2.SetState(STATE_WALKDOWN);
+	}
+	else if(keysReleased[97]) {
+		keysReleased[97] = false;
+		if(Player2.GetState() == STATE_DDOWNLEFT) Player2.SetState(STATE_WALKDOWN);
+		else if(Player2.GetState() == STATE_DUPLEFT) Player2.SetState(STATE_WALKUP);
+	}
 	if (keysSpecial[GLUT_KEY_F9]) Init();
 	if (keysSpecial[GLUT_KEY_F2]) {
-		if(!p2IsPlaying) {
+		if(!p2IsPlaying && Player.GetHp()>0) {
 			p2IsPlaying = true;
 			Player.GetTile(&x,&y);
 			Player2.SetTile(x,y);
@@ -454,18 +464,20 @@ bool cGame::Process()
 	Player.GetPosition(&x1,&y1);
 	int x2,y2;
 	Player2.GetPosition(&x2,&y2);
-	if (Player.GetHp()>0 && Player2.GetHp()>0) {
-		if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
-		else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
-	}
-	else if(Player2.GetHp() <= 0 && Player.GetHp() <= 0);
-	else if(Player2.GetHp() <= 0) {
-		if(y1-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
-		else if(y1-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
-	}
-	else if (Player.GetHp() <= 0) {
-		if(y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
-		else if(y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+	if(ActualLevel!=3) {
+		if (Player.GetHp()>0 && Player2.GetHp()>0) {
+			if(y1-Scene.getDesp() > GAME_HEIGHT/3 && y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+			else if(y1-Scene.getDesp() < GAME_HEIGHT/5 && y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+		}
+		else if(Player2.GetHp() <= 0 && Player.GetHp() <= 0);
+		else if(Player2.GetHp() <= 0) {
+			if(y1-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+			else if(y1-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+		}
+		else if (Player.GetHp() <= 0) {
+			if(y2-Scene.getDesp() > GAME_HEIGHT/3) Scene.Scroll(2);
+			else if(y2-Scene.getDesp() < GAME_HEIGHT/5) Scene.Scroll(-2);
+		}
 	}
 	
 	
@@ -501,6 +513,7 @@ bool cGame::Process()
 			if(Enemy[i].Collides2(&pos)) {
 				Enemy[i].kill();
 				Player.LoseHp();
+				Sound.PlaySound("explosion.aiff",false,0.4);
 			}
 
 		}
@@ -510,6 +523,7 @@ bool cGame::Process()
 			if(Enemy[i].Collides2(&pos)) {
 				Enemy[i].kill();
 				Player2.LoseHp();
+				Sound.PlaySound("explosion.aiff",false,0.4);
 			}
 
 		}
@@ -527,6 +541,7 @@ bool cGame::Process()
 			if(Enemy2[i].Collides2(&pos)) {
 				Enemy2[i].kill();
 				Player.LoseHp();
+				Sound.PlaySound("explosion.aiff",false,0.4);
 			}
 
 		}
@@ -536,6 +551,7 @@ bool cGame::Process()
 			if(Enemy2[i].Collides2(&pos)) {
 				Enemy2[i].kill();
 				Player2.LoseHp();
+				Sound.PlaySound("explosion.aiff",false,0.4);
 			}
 
 		}
@@ -554,13 +570,15 @@ bool cGame::Process()
 					//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
 					//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 					EnemyShoot[enemyShootCount].CanShoot(Scene.GetMap(),Enemy2[i]);
+					if(EnemyShoot[enemyShootCount].IsActive())Sound.PlaySound("laserEnemy.wav",false,0.1);
 					enemyShootCount = (enemyShootCount+1)%500;
+					
 				}
 		}
 	}
 
 	//Game Logic
-	if (Scene.getDesp()>=1770) this->NextLevel();
+	if (Scene.getDesp()>=1800) this->NextLevel();
 	//Player.Logic(Scene.GetMap());
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
@@ -579,7 +597,7 @@ bool cGame::Process()
 						Shoot[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false);
+						Sound.PlaySound("explosion.aiff",false,0.4);
 					}
 				}
 			}
@@ -594,7 +612,7 @@ bool cGame::Process()
 						Player.AddPoints(1000);
 						Shoot[i].SetActive(false);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false);
+						Sound.PlaySound("explosion.aiff",false,0.4);
 					}
 				}
 			}
@@ -617,6 +635,7 @@ bool cGame::Process()
 						Shoot2[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
+						Sound.PlaySound("explosion.aiff",false,0.4);
 					}
 				}
 			}
@@ -631,6 +650,7 @@ bool cGame::Process()
 						Shoot2[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
+						Sound.PlaySound("explosion.aiff",false,0.4);
 					}
 				}
 			}
@@ -645,6 +665,8 @@ bool cGame::Process()
 			EnemyShoot[i].GetArea(&pos);
 			if(Player.isAlive() && Player.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
+				if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+				else Sound.PlaySound("hurt2.wav",false,0.5);
 				Player.LoseHp();
 			}
 		}
@@ -652,6 +674,8 @@ bool cGame::Process()
 			EnemyShoot[i].GetArea(&pos);
 			if(Player2.isAlive() && Player2.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
+				if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+				else Sound.PlaySound("femHurt.mp3",false,0.5);
 				Player2.LoseHp();
 			}
 		}
@@ -663,6 +687,7 @@ bool cGame::Process()
 			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
 				Item[i].SetActive(false);
 				Player.WinHp();
+				Sound.PlaySound("Powerup.ogg",false);
 			}
 		}
 		if (ActualLevel == 3) {
@@ -670,6 +695,8 @@ bool cGame::Process()
 				if (Shoot2[i].IsActive() && Shoot2[i].Collides2(&pos)) {
 					Player.LoseHp();
 					Shoot2[i].SetActive(false);
+					if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+					else Sound.PlaySound("hurt2.wav",false,0.5);
 				}
 			}
 		}
@@ -681,6 +708,7 @@ bool cGame::Process()
 			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
 				Item[i].SetActive(false);
 				Player2.WinHp();
+				Sound.PlaySound("Powerup.ogg",false);
 			}
 		}
 		if (ActualLevel == 3) {
@@ -688,6 +716,8 @@ bool cGame::Process()
 				if (Shoot[i].IsActive() && Shoot[i].Collides2(&pos)) {
 					Shoot[i].SetActive(false);
 					Player2.LoseHp();
+					if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
+					else Sound.PlaySound("femHurt.mp3",false,0.5);
 				}
 			}
 		}
@@ -775,12 +805,16 @@ void cGame::Render()
 	
 	}
 	glColor3f(1.0f,1.0f,1.0f);
-	if(Scene.getDesp()>=1760 && ActualLevel == 1) {
+	if(Scene.getDesp()>=1798 && ActualLevel == 1) {
 		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
-	if(Scene.getDesp()>=1760 && ActualLevel == 2) {
-		Hud.DrawLevelComplete(Data.GetID(IMG_FONT),Scene.getDesp());
+	if(Scene.getDesp()>=1798 && ActualLevel == 2 && (!Player.isAlive() || !Player2.isAlive())) {
+		Hud.DrawGameComplete(Data.GetID(IMG_FONT),Scene.getDesp());
 	}
+	else {
+
+	}
+	Hud.DrawPrepareToFight(Data.GetID(IMG_FONT),Scene.getDesp());
 	if(!p2IsPlaying) Hud.DrawPlayer2Text(Data.GetID(IMG_FONT),Scene.getDesp());
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
