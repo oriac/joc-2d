@@ -17,6 +17,7 @@ public:
 	cSound(void);
 	~cSound(void);
 	void PlaySound(char* path,bool loop);
+	void PlaySound(char* path,bool loop,float vol);
 	void Update();
 private:
 	FMOD::System     *system;
