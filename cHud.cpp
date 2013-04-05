@@ -24,18 +24,6 @@ void cHud::DrawHearts(int tex_id,int life, int d)
 		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
 	}
-/*	glPushMatrix();
-	glTranslatef(32., 400+d, 0.);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D,tex_id);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0,1); glVertex2i(32,32);
-		glTexCoord2f(1,1); glVertex2i(64,32);
-		glTexCoord2f(1,0); glVertex2i(64,64);
-		glTexCoord2f(0,0); glVertex2i(32,64);
-	glEnd();
-	glPopMatrix();
-	glDisable(GL_TEXTURE_2D);*/
 }
 
 void cHud::DrawBlueHearts(int tex_id,int life, int d)
@@ -175,6 +163,7 @@ void cHud::DrawLevelComplete(int tex_id, int d) {
 		Draw50(tex_id,tx,ty,step_x,step_y,140.+50.*i,190+d);
 	}
 }
+
 void cHud::DrawGameComplete(int tex_id, int d) {
 	int step_x,step_y;
 	float tx,ty;
@@ -199,6 +188,72 @@ void cHud::DrawGameComplete(int tex_id, int d) {
 	}
 }
 
+void cHud::DrawPlayer2Wins(int tex_id, int d) {
+	int step_x,step_y;
+	float tx,ty;
+	tx = 1./16.;
+	ty = 1./8.;
+	//writing punts:
+	
+    string aux = "player";
+	int n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,50.+50.*i,205+d);
+	}
+	
+	//2
+		step_x = ('2'-'0')+16;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,350.,205+d);
+	aux = "wins";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,416.+50.*i,205+d);
+	}
+
+}
+
+
+
+
+void cHud::DrawPlayer1Wins(int tex_id, int d) {
+	int step_x,step_y;
+	float tx,ty;
+	tx = 1./16.;
+	ty = 1./8.;
+	//writing punts:
+	
+    string aux = "player";
+	int n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,50.+50.*i,205+d);
+	}
+	
+	//1
+		step_x = ('1'-'0')+16;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,350.,205+d);
+	aux = "wins";
+	n = aux.size();
+	for(int i=0;i<n;i++) {
+		step_x = (aux[i]-'a')+33;
+		step_y = step_x/10;
+		step_x = step_x%10;
+		Draw50(tex_id,tx,ty,step_x,step_y,416.+50.*i,205+d);
+	}
+
+}
 
 void cHud::DrawPrepareToFight(int tex_id, int d) {
 	int step_x,step_y;
@@ -234,7 +289,6 @@ void cHud::DrawPrepareToFight(int tex_id, int d) {
 
 void cHud::Draw(int tex_id, float tx,float ty, int step_x,int step_y,float trans_x, float trans_y) {
 			glPushMatrix();
-			//glTranslatef(240.+16.*i, 450+d, 0.);
 			glTranslatef(trans_x,trans_y,0.);
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D,tex_id);
@@ -250,7 +304,6 @@ void cHud::Draw(int tex_id, float tx,float ty, int step_x,int step_y,float trans
 
 void cHud::Draw50(int tex_id, float tx,float ty, int step_x,int step_y,float trans_x, float trans_y) {
 			glPushMatrix();
-			//glTranslatef(240.+16.*i, 450+d, 0.);
 			glTranslatef(trans_x,trans_y,0.);
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D,tex_id);

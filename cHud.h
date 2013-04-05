@@ -19,6 +19,8 @@ public:
 	void DrawGameComplete(int text_id,int d);
 	void DrawPlayer2Text(int text_id,int d);
 	void DrawPrepareToFight(int text_id,int d);
+	void DrawPlayer1Wins(int text_id,int d);
+	void DrawPlayer2Wins(int text_id,int d);
 
 private:
 	void Draw(int tex_id, float tx,float ty, int step_x,int step_y,float trans_x, float trans_y);

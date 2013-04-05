@@ -123,7 +123,6 @@ void cShoot::ShootCollides(int shootState, int *map) {
 void cShoot::CanShoot(int *map, cBicho &Player) {
 	int x,y;
 	GetTile(&x,&y);
-	//if(map[x+(y*SCENE_WIDTH)] != 0 || map[(x+1)+(y*SCENE_WIDTH)] != 0 || map[x+((y+1)*SCENE_WIDTH)] != 0 || map[(x+1)+((y+1)*SCENE_WIDTH)] != 0) active = false;
 	if(map[x+(y*SCENE_WIDTH)] != 0) active = false;
 	else active = true;
 	if(active) {
@@ -136,21 +135,14 @@ void cShoot::CanShoot(int *map, cBicho &Player) {
 			active = !(Player.CollidesTopBot(map,false));
 			if(map[x+((y+1)*SCENE_WIDTH)] != 0) active = false;
 		}
-			//else if(map[(x+1)+((y+1)*SCENE_WIDTH)] != 0) active = false;
 		else if(GetState() == STATE_LOOKUP||GetState() == STATE_LOOKUP) {
 			active = !(Player.CollidesTopBot(map,true));
-			//if(map[x+((y-1)*SCENE_WIDTH)] != 0) active = false;
-			//if(map[(x+1)+y*SCENE_WIDTH]) active = false;
-			//active = !CollidesMapTop(map);
 		}
 		else if(GetState() == STATE_SHOOT_RIGHT || GetState() == STATE_LOOKRIGHT || GetState() == STATE_WALKRIGHT ) {
 			active = !(Player.CollidesMapWall(map,true));
 			if(map[(x+1)+y*SCENE_WIDTH] != 0) active = false;
-			//if(map[(x+1)+y*SCENE_WIDTH] != 0) active = false;
 		}
 		else if(GetState() == STATE_DUPLEFT) {
-			//if(map[(x-1)+((y+1)*SCENE_WIDTH)] != 0)active = false;
-			//active = !(Player.CollidesMapWall(map,false));
 			active = !(Player.CollidesWall(map,false));
 		}
 	}

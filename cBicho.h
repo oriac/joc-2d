@@ -62,7 +62,6 @@ public:
 	void Shoot(int *map);
 	void Jump(int *map);
 	void Stop();
-	void Logic(int *map);
 
 	int  GetState();
 	void SetState(int s);

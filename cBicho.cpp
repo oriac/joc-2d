@@ -55,9 +55,6 @@ bool cBicho::Collides(cRect *rc)
 
 bool cBicho::Collides2(cRect *rc)
 {
-	/*if (((x>=rc->left) && (x+w<=rc->left)) || ((x>=rc->right) && (x+w<=rc->right)) &&
-		((y>=rc->bottom) && (y+h<=rc->bottom)) || ((y>=rc->top) && (y+h<=rc->top))) return true;
-	else return false;*/
 	return ((x<rc->right) && (rc->left<x+w) && (y<rc->top) && (rc->bottom<y+h));
 }
 bool cBicho::CollidesWall(int* map, bool right) 
@@ -175,73 +172,7 @@ bool cBicho::CollidesMapTop(int *map) {
 	
 	return false;
 }
-/*bool cBicho::CollidesMapTop(int *map) {
-	int tile_x,tile_y;
-	int width_tiles;
-	bool on_base;
-	int i;
 
-	tile_x = x / TILE_SIZE;
-	tile_y = y / TILE_SIZE;
-
-	width_tiles = w / TILE_SIZE;
-	if( (x % TILE_SIZE) != 0) width_tiles++;
-	on_base = false;
-	i=0;
-	while((i<width_tiles) && !on_base)
-	{
-		if( (y % TILE_SIZE) == 0 )
-		{
-			if(map[ (tile_x + i) + ((tile_y) * SCENE_WIDTH) ] != 0)
-				on_base = true;
-		}
-		else
-		{
-			if(map[ (tile_x + i) + ((tile_y+2) * SCENE_WIDTH) ] != 0)
-			{
-				y = (tile_y + 1) * TILE_SIZE;
-				on_base = true;
-			}
-		}
-		i++;
-	}
-	return on_base;
-}*/
-
-/*bool cBicho::CollidesMapFloor(int *map)
-{
-	int tile_x,tile_y;
-	int width_tiles;
-	bool on_base;
-	int i;
-
-	tile_x = x / TILE_SIZE;
-	tile_y = y / TILE_SIZE;
-
-	width_tiles = w / TILE_SIZE;
-	if( (x % TILE_SIZE) != 0) width_tiles++;
-
-	on_base = false;
-	i=0;
-	while((i<width_tiles) && !on_base)
-	{
-		if( (y % TILE_SIZE) == 0 )
-		{
-			if(map[ (tile_x + i) + ((tile_y - 1) * SCENE_WIDTH) ] != 0)
-				on_base = true;
-		}
-		else
-		{
-			if(map[ (tile_x + i) + (tile_y * SCENE_WIDTH) ] != 0)
-			{
-				y = (tile_y + 1) * TILE_SIZE;
-				on_base = true;
-			}
-		}
-		i++;
-	}
-	return on_base;
-}*/
 
 bool cBicho::CollidesMapFloor(int *map) {
 	int tile_x,tile_y;
@@ -253,7 +184,6 @@ bool cBicho::CollidesMapFloor(int *map) {
 	width_tiles  = w / TILE_SIZE;
 	height_tiles = h / TILE_SIZE;
 
-	//if(top)	tile_y += height_tiles;
 	if( (x % TILE_SIZE) != 0) width_tiles++;
 	for(j=0;j<width_tiles;j++)
 	{
@@ -415,16 +345,6 @@ void cBicho::Shoot(int *map)
 			seq = 0;
 			delay = 0;
 		}
-	/*else if(state == STATE_LOOKUP) {
-			state = STATE_LOOKUP;
-			seq = 0;
-			delay = 0;
-	}
-	else if(state == STATE_LOOKDOWN) {
-			state = STATE_LOOKDOWN;
-			seq = 0;
-			delay = 0;
-	}*/
 	else if(state == STATE_SHOOT_RIGHT || state == STATE_WALKRIGHT || state == STATE_LOOKRIGHT)	{
 			state = STATE_SHOOT_RIGHT;
 			seq = 0;
@@ -457,38 +377,7 @@ void cBicho::Jump(int *map)
 		}
 	}
 }
-void cBicho::Logic(int *map)
-{
-	float alfa;
 
-	/*if(jumping)
-	{
-		jump_alfa += JUMP_STEP;
-		
-		if(jump_alfa == 180)
-		{
-			jumping = false;
-			y = jump_y;
-		}
-		else
-		{
-			alfa = ((float)jump_alfa) * 0.017453f;
-			y = jump_y + (int)( ((float)JUMP_HEIGHT) * sin(alfa) );
-		
-			if(jump_alfa > 90)
-			{
-				//Over floor?
-				jumping = !CollidesMapFloor(map);
-			}
-		}
-	}
-	else
-	{
-		//Over floor?
-		if(!CollidesMapFloor(map))
-			y -= (2*STEP_LENGTH);
-	}*/
-}
 void cBicho::NextFrame(int max)
 {
 	delay++;

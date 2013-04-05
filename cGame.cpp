@@ -11,11 +11,10 @@ cGame::~cGame(void)
 }
 
 void cGame::NextLevel() {
-	//PlaySound("ff7.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
 	Sleep(6000);
 	if (ActualLevel ==1) {
 		++ActualLevel;
-		Sound.PlaySound("ff7.wav",true);
+		Sound.PlaySound("resources/music/ff7.wav",true);
 		for (int i = 0; i < 4; ++i) {
 			if (i ==0) Item[i].SetTile(23,27);
 			else if (i ==1) Item[i].SetTile(15,65);
@@ -27,7 +26,7 @@ void cGame::NextLevel() {
 		Player2.SetTile(7,1);
 	}
 	else if (ActualLevel == 2 && Player.isAlive() && Player2.isAlive()) {
-		Sound.PlaySoundA("pvp.mp3",true);
+		Sound.PlaySoundA("resources/music/pvp.mp3",true);
 		ActualLevel = 3;
 		for (int i = 0; i < 4; ++i) {
 			if (i ==0) Item[i].SetTile(17,16);
@@ -111,8 +110,7 @@ void cGame::NextLevel() {
 bool cGame::Init()
 {
 	ActualLevel = 1;
-	//PlaySound("ff6.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP|SND_NOSTOP);
-	Sound.PlaySound("ff6.wav",true);
+	Sound.PlaySound("resources/music/ff6.wav",true);
 	Scene.ResetCam();
 	bool res=true;
 	startTime = glutGet(GLUT_ELAPSED_TIME);
@@ -127,35 +125,35 @@ bool cGame::Init()
 
 	//Scene initialization
 	red = 1.0f;
-	res = Data.LoadImage(IMG_HEART,"heart2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_HEART,"resources/im/heart2.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_FONT,"font.png",GL_RGBA);
+	res = Data.LoadImage(IMG_FONT,"resources/im/font.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL01,"maptest.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL01,"resources/im/maptest.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL01_2,"map1_2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL01_2,"resources/im/map1_2.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL02,"map2_1.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL02,"resources/im/map2_1.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL02_2,"map2_2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL02_2,"resources/im/map2_2.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_LEVEL03,"map3.png",GL_RGBA);
+	res = Data.LoadImage(IMG_LEVEL03,"resources/im/map3.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_BLOCKS,"blocks.png",GL_RGBA);
+	res = Data.LoadImage(IMG_BLOCKS,"resources/im/blocks.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_BLUEHEART,"blueheart.png",GL_RGBA);
+	res = Data.LoadImage(IMG_BLUEHEART,"resources/im/blueheart.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_ARMOR,"armadura.png",GL_RGBA);
+	res = Data.LoadImage(IMG_ARMOR,"resources/im/armadura.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_PLAYERARMOR,"playerfullArmor.png",GL_RGBA);
+	res = Data.LoadImage(IMG_PLAYERARMOR,"resources/im/playerfullArmor.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_NAKEDPLAYER,"nakedPlayer.png",GL_RGBA);
+	res = Data.LoadImage(IMG_NAKEDPLAYER,"resources/im/nakedPlayer.png",GL_RGBA);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_PLAYER2ARMOR,"player2fullArmor.png",GL_RGBA);
+	res = Data.LoadImage(IMG_PLAYER2ARMOR,"resources/im/player2fullArmor.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_NAKEDPLAYER2,"nakedPlayer2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_NAKEDPLAYER2,"resources/im/nakedPlayer2.png",GL_RGBA);
 	if(!res) return false;
 	res = Scene.LoadLevel(1);
 
@@ -167,16 +165,15 @@ bool cGame::Init()
 		else if (i ==1) Item[i].SetTile(24,65);
 		else if (i ==2) Item[i].SetTile(6,97);
 		else Item[i].SetTile(16,120);
-		//Item[i].SetTile(i*2+4, 7);
 		Item[i].SetActive(true);
 		Item[i].SetWidthHeight(32,32);
 	}
 
 	//Enemy initialization
 
-	res = Data.LoadImage(IMG_ENEMY2,"enemy2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_ENEMY2,"resources/im/enemy2.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_ENEMY,"enemy.png",GL_RGBA);
+	res = Data.LoadImage(IMG_ENEMY,"resources/im/enemy.png",GL_RGBA);
 	if(!res) return false;
 	vector<Point> pat (4);
 	for (int i = 0; i < 10; ++i) {
@@ -200,7 +197,6 @@ bool cGame::Init()
 	for ( int i = 0; i < 10; i++) {
 		int aux;
 		if ( i < 5 ) aux = 46;
-		//else if ( i >= 2 &&  i < 5) aux = 100;
 		else if ( i >= 5) aux = 120;
 		p1.tiley = aux+2;
 		p2.tiley = aux;
@@ -214,19 +210,17 @@ bool cGame::Init()
 		Enemy2[i].SetWidthHeight(32,32);
 		Enemy2[i].SetTile(4+(i*2),aux);
 		Enemy2[i].SetSpeed(1);
-		//Enemy2[i].kill();
-		//if ( i <= 2) Enemy2[i].Active();
 	}
 	firstPatrol = false;
 	firstTrap = false;
 	secondPatrol = false;
 
 	//Player initialization
-	res = Data.LoadImage(IMG_PLAYER,"player.png",GL_RGBA);
+	res = Data.LoadImage(IMG_PLAYER,"resources/im/player.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_PLAYER2,"player2.png",GL_RGBA);
+	res = Data.LoadImage(IMG_PLAYER2,"resources/im/player2.png",GL_RGBA);
 	if(!res) return false;
-	res = Data.LoadImage(IMG_BULLET,"bullet3.png",GL_RGBA);
+	res = Data.LoadImage(IMG_BULLET,"resources/im/bullet3.png",GL_RGBA);
 	if(!res) return false;
 	Player.Respawn();
 	Player.SetWidthHeight(32,32);
@@ -234,20 +228,13 @@ bool cGame::Init()
 	Player.SetTile(4,1);
 	shootCount = 0;
 	startCd = -500;
-	//Player.SetWidthHeight(32,32);
 	Player.SetState(STATE_LOOKRIGHT);
 
 	if(p2IsPlaying)Player2.Respawn();
-	//else Player2.Dead();
 	Player2.SetWidthHeight(32,32);
 	Player2.SetSpeed(1);
 	Player2.SetTile(16,1);
-	//shootCount = 0;
-	//startCd = -500;
-	//Player.SetWidthHeight(32,32);
 	Player2.SetState(STATE_LOOKRIGHT);
-	//Player2.Dead();
-	collide = false;
 	
 	//Shoots init
 	for (int i = 0; i < 100; ++i) {
@@ -269,6 +256,8 @@ bool cGame::Init()
 	shootCount2 = 0;
 	enemyShootCount = 0;
 
+	gameOverPlayed = false;
+
 	return res;
 }
 
@@ -285,7 +274,6 @@ bool cGame::Loop()
 	if (timePerFrame-loopTime >= 0) {
 		Sleep(timePerFrame-loopTime);
 	}
-	//update(loopTime);
 	if(res) Render();
 
 	return res;
@@ -330,9 +318,10 @@ bool cGame::Process()
 	bool res=true;
 	int x,y;
 	cRect pos;
-	
+	//Update obligado del sound
 	Sound.Update();
 	//Process Input
+	//Input Player1
 	if(keys[27])	res=false;
 	if(Player.isAlive()) {
 		if(keysSpecial[GLUT_KEY_UP]||keysSpecial[GLUT_KEY_DOWN]||keysSpecial[GLUT_KEY_LEFT]||keysSpecial[GLUT_KEY_RIGHT]) {
@@ -377,14 +366,9 @@ bool cGame::Process()
 				Player.GetPosition(&x,&y);
 				Shoot[shootCount].SetInitPos(Player.GetState(),x,y);
 				Shoot[shootCount].SetState(Player.GetState());
-				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
-				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot[shootCount].CanShoot(Scene.GetMap(),Player);
-				if(Shoot[shootCount].IsActive())Sound.PlaySound("shoot.wav",false);
+				if(Shoot[shootCount].IsActive())Sound.PlaySound("resources/music/shoot.wav",false);
 				shootCount = (shootCount+1)%100;
-				//PlaySound("shoot.wav", NULL, SND_ASYNC|SND_FILENAME|SND_NOSTOP);
-				
-			
 			}
 		}
 	}
@@ -454,10 +438,8 @@ bool cGame::Process()
 				Player2.GetPosition(&x,&y);
 				Shoot2[shootCount2].SetInitPos(Player2.GetState(),x,y);
 				Shoot2[shootCount2].SetState(Player2.GetState());
-				//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
-				//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 				Shoot2[shootCount2].CanShoot(Scene.GetMap(),Player2);
-				if(Shoot2[shootCount2].IsActive())Sound.PlaySound("shoot.wav",false);
+				if(Shoot2[shootCount2].IsActive())Sound.PlaySound("resources/music/shoot.wav",false);
 				shootCount2 = (shootCount2+1)%100;
 			}
 		}
@@ -516,6 +498,7 @@ bool cGame::Process()
 	//Enemy Logic
 	Player.GetTile(&x,&y);
 	Player2.GetTile(&x2,&y2);
+	//Spawn de enemy
 	if ( Scene.getDesp() > 800-80  && !this->firstTrap) {
 			firstTrap = true;
 			for ( int i = 0; i < 10; ++i) {
@@ -526,36 +509,32 @@ bool cGame::Process()
 		for ( int i = 5; i < 10; ++i) {
 				Enemy2[i].Active();
 				Enemy[i].Active();
-				//if ( i > 2 &&  i < 5) Enemy2[i].Active();
 		}
 		secondPatrol = true;
 	}
 	if ( Scene.getDesp() > 320-80 && !this->firstPatrol) {
 		for ( int i = 0; i < 5; ++i) {
 				Enemy2[i].Active();
-				//if ( i > 2 &&  i < 5) Enemy2[i].Active();
 		}
 		firstPatrol = true;
 	}
-
+	//Enemy choca con player
 	for (int i = 0; i < 10; ++i) {
 		if(Enemy[i].IsAlive() && Player.isAlive()) {
-			//cRect pos;
 			Player.GetArea(&pos);
 			if(Enemy[i].Collides2(&pos)) {
 				Enemy[i].kill();
 				Player.LoseHp();
-				Sound.PlaySound("explosion.aiff",false,0.4);
+				Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 			}
 
 		}
 		if(Enemy[i].IsAlive() && Player2.isAlive()) {
-			//cRect pos;
 			Player2.GetArea(&pos);
 			if(Enemy[i].Collides2(&pos)) {
 				Enemy[i].kill();
 				Player2.LoseHp();
-				Sound.PlaySound("explosion.aiff",false,0.4);
+				Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 			}
 
 		}
@@ -568,25 +547,24 @@ bool cGame::Process()
 	shootECd = endECd - startECd;
 	for ( int i = 0; i < 10; ++i) {
 		if(Enemy2[i].IsAlive()) {
-			//cRect pos;
 			Player.GetArea(&pos);
 			if(Enemy2[i].Collides2(&pos)) {
 				Enemy2[i].kill();
 				Player.LoseHp();
-				Sound.PlaySound("explosion.aiff",false,0.4);
+				Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 			}
 
 		}
 		if(Enemy2[i].IsAlive()) {
-			//cRect pos;
 			Player2.GetArea(&pos);
 			if(Enemy2[i].Collides2(&pos)) {
 				Enemy2[i].kill();
 				Player2.LoseHp();
-				Sound.PlaySound("explosion.aiff",false,0.4);
+				Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 			}
 
 		}
+		//disparo de patrullas
 		if (Enemy2[i].IsAlive()) {
 			Enemy2[i].SetStep(x,y,Scene.GetMap());
 			
@@ -595,113 +573,101 @@ bool cGame::Process()
 		
 					int x;
 					int y;
-					//Player.Shoot(Scene.GetMap());
 					Enemy2[i].GetPosition(&x,&y);
 					EnemyShoot[enemyShootCount].SetInitPos(STATE_LOOKDOWN,x,y);
 					EnemyShoot[enemyShootCount].SetState(STATE_LOOKDOWN);
-					//Shoot[shootCount].SetActive(!(Shoot[shootCount].CollidesMapWall(Scene.GetMap(),false)||
-					//					Shoot[shootCount].CollidesMapFloor(Scene.GetMap())));
 					EnemyShoot[enemyShootCount].CanShoot(Scene.GetMap(),Enemy2[i]);
-					if(EnemyShoot[enemyShootCount].IsActive())Sound.PlaySound("laserEnemy.wav",false,0.1);
+					if(EnemyShoot[enemyShootCount].IsActive())Sound.PlaySound("resources/music/laserEnemy.wav",false,0.1);
 					enemyShootCount = (enemyShootCount+1)%500;
 					
 				}
 		}
 	}
 
-	//Game Logic
+	//Cambio de level
 	if (Scene.getDesp()>=1800) {
-		Sound.PlaySound("Victory.ogg",true);
+		Sound.PlaySound("resources/music/Victory.ogg",true);
 		this->NextLevel();
 	}
-	//Player.Logic(Scene.GetMap());
+	//colision disparos de player1
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
 			int shootState = Shoot[i].GetState();
 			Shoot[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot[i].ShootStep(shootState,Scene.GetMap());
-			//cRect pos;
 			bool muerte = false;
 			for (int j = 0; j < 10; ++j) {
 				if(Enemy[j].IsAlive() && !muerte) {
-					//Enemy.GetArea(&pos);
 					Shoot[i].GetArea(&pos);
-					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy[j].Collides2(&pos)) {
 						Enemy[j].kill();
 						Shoot[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false,0.4);
+						Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 					}
 				}
 			}
 			muerte = false;
 			for (int j = 0; j < 10 && !muerte; ++j) {
 				if(Enemy2[j].IsAlive()) {
-					//Enemy.GetArea(&pos);
 					Shoot[i].GetArea(&pos);
-					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy2[j].Collides2(&pos)) {
 						Enemy2[j].kill();
 						Player.AddPoints(1000);
 						Shoot[i].SetActive(false);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false,0.4);
+						Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 					}
 				}
 			}
 		}
 	}
+	//colision de disparos player2
 	for(int i=0;i<100;i++) {
 		if(Shoot2[i].IsActive()) {
 			int shootState = Shoot2[i].GetState();
 			Shoot2[i].ShootCollides(shootState, Scene.GetMap());
 			Shoot2[i].ShootStep(shootState,Scene.GetMap());
-			//cRect pos;
 			bool muerte = false;
 			for (int j = 0; j < 10 && !muerte; ++j) {
 				if(Enemy[j].IsAlive() ) {
-					//Enemy.GetArea(&pos);
 					Shoot2[i].GetArea(&pos);
-					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy[j].Collides2(&pos)) {
 						Enemy[j].kill();
 						Shoot2[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false,0.4);
+						Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 					}
 				}
 			}
 			muerte = false;
 			for (int j = 0; j < 10 && !muerte; ++j) {
 				if(Enemy2[j].IsAlive()) {
-					//Enemy.GetArea(&pos);
 					Shoot2[i].GetArea(&pos);
-					//if(Shoot[i].Collides(&pos)) {
 					if(Enemy2[j].Collides2(&pos)) {
 						Enemy2[j].kill();
 						Shoot2[i].SetActive(false);
 						Player.AddPoints(1000);
 						muerte = true;
-						Sound.PlaySound("explosion.aiff",false,0.4);
+						Sound.PlaySound("resources/music/explosion.aiff",false,0.4);
 					}
 				}
 			}
 		}
 	}
+	//colisiones de disparos enemgios
 	for(int i=0;i<500;i++) {
 		if(EnemyShoot[i].IsActive()) {
 			int shootState = EnemyShoot[i].GetState();
 			EnemyShoot[i].ShootCollides(shootState, Scene.GetMap());
 			EnemyShoot[i].ShootStep(shootState,Scene.GetMap());
-			//cRect pos;
 			EnemyShoot[i].GetArea(&pos);
 			if(Player.isAlive() && Player.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
-				if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
-				else Sound.PlaySound("hurt2.wav",false,0.5);
+				if(Player.GetHp()>3)Sound.PlaySound("resources/music/hurtArmor.ogg",false,2.0);
+				else Sound.PlaySound("resources/music/hurt2.wav",false,0.5);
 				Player.LoseHp();
 			}
 		}
@@ -709,62 +675,66 @@ bool cGame::Process()
 			EnemyShoot[i].GetArea(&pos);
 			if(Player2.isAlive() && Player2.Collides2(&pos)) {
 				EnemyShoot[i].SetActive(false);
-				if(Player2.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
-				else Sound.PlaySound("femHurt.mp3",false,0.5);
+				if(Player2.GetHp()>3)Sound.PlaySound("resources/music/hurtArmor.ogg",false,2.0);
+				else Sound.PlaySound("resources/music/femHurt.mp3",false,0.5);
 				Player2.LoseHp();
 			}
 		}
 	}
-
+	//Armadura
 	if (Player.isAlive()) {
 		Player.GetArea(&pos);
 		for (int i = 0; i < 4; i++) {
 			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
 				Item[i].SetActive(false);
 				Player.WinHp();
-				Sound.PlaySound("Powerup.ogg",false);
+				Sound.PlaySound("resources/music/Powerup.ogg",false);
 			}
 		}
+		//PvP
 		if (ActualLevel == 3) {
 			for (int i = 0; i < 100; i++) {
 				if (Shoot2[i].IsActive() && Shoot2[i].Collides2(&pos)) {
 					Player.LoseHp();
 					Shoot2[i].SetActive(false);
-					if(Player.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
-					else Sound.PlaySound("hurt2.wav",false,0.5);
+					if(Player.GetHp()>3)Sound.PlaySound("resources/music/hurtArmor.ogg",false,2.0);
+					else Sound.PlaySound("resources/music/hurt2.wav",false,0.5);
 				}
 			}
 		}
 	}
-
+	//Armadura
 	if (Player2.isAlive()) {
 		Player2.GetArea(&pos);
 		for (int i = 0; i < 4; i++) {
 			if (Item[i].IsActive() && Item[i].Collides2(&pos)) {
 				Item[i].SetActive(false);
 				Player2.WinHp();
-				Sound.PlaySound("Powerup.ogg",false);
+				Sound.PlaySound("resources/music/Powerup.ogg",false);
 			}
 		}
+		//PvP
 		if (ActualLevel == 3) {
 			for (int i = 0; i < 100; i++) {
 				if (Shoot[i].IsActive() && Shoot[i].Collides2(&pos)) {
 					Shoot[i].SetActive(false);
 					Player2.LoseHp();
-					if(Player2.GetHp()>3)Sound.PlaySound("hurtArmor.ogg",false,2.0);
-					else Sound.PlaySound("femHurt.mp3",false,0.5);
+					if(Player2.GetHp()>3)Sound.PlaySound("resources/music/hurtArmor.ogg",false,2.0);
+					else Sound.PlaySound("resources/music/femHurt.mp3",false,0.5);
 				}
 			}
 		}
 	}
-
+	//Muerte de players
 	if(Player.GetHp() <= 0 && Player.isAlive()) {
 		Player.Dead();
-		//Player.SetTile(4,1);
 	}
 	if(Player2.GetHp() <= 0 && Player2.isAlive() ) {
 		Player2.Dead();
-		//Player2.SetTile(16,1);
+	}
+	if(!Player.isAlive()&&!Player2.isAlive()&&!gameOverPlayed){
+		gameOverPlayed = true;
+		Sound.PlaySound("resources/music/game_over.mp3",true);
 	}
 	return res;
 }
@@ -792,7 +762,6 @@ void cGame::Render()
 		else if ( Player.GetHp() == 1) Player.Draw(Data.GetID(IMG_NAKEDPLAYER));
 		else Player.Draw(Data.GetID(IMG_PLAYER));
 	}
-	//glColor3f(0.0f,0.0f,1.0f);
 
 	// Draw Player 2
 
@@ -801,7 +770,6 @@ void cGame::Render()
 		else if ( Player2.GetHp() == 1) Player2.Draw(Data.GetID(IMG_NAKEDPLAYER2));
 		else Player2.Draw(Data.GetID(IMG_PLAYER2));
 	}
-	//glColor3f(1.0f,1.0f,1.0f);
 	
 	//draw items
 
@@ -810,12 +778,9 @@ void cGame::Render()
 	}
 
 
-	cRect pos2;
-	//collide = false;
-	//Player.GetArea(&pos2);
+	
 	for(int i=0;i<100;i++) {
 		if(Shoot[i].IsActive()) {
-			//glColor3f(0.0f,0.0f,1.0f);
 			Shoot[i].Draw(Data.GetID(IMG_BULLET));
 		}
 	
@@ -855,6 +820,8 @@ void cGame::Render()
 	Hud.DrawHearts(Data.GetID(IMG_HEART),Player.GetHp(),Scene.getDesp());
 	Hud.DrawBlueHearts(Data.GetID(IMG_BLUEHEART),Player2.GetHp(),Scene.getDesp());
 	Hud.DrawPoints(Data.GetID(IMG_FONT),Player.GetPoints(),Scene.getDesp());
-	if(Player.GetHp() <= 0 && Player2.GetHp() <= 0)Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
+	if(Player.GetHp() <= 0 && Player2.GetHp() <= 0 && ActualLevel!=3) Hud.DrawGameOver(Data.GetID(IMG_FONT),Scene.getDesp());
+	else if(Player.GetHp() <= 0 && ActualLevel==3) Hud.DrawPlayer2Wins(Data.GetID(IMG_FONT),Scene.getDesp());
+	else if(Player2.GetHp() <= 0 && ActualLevel==3) Hud.DrawPlayer1Wins(Data.GetID(IMG_FONT),Scene.getDesp());
 	glutSwapBuffers();
 }

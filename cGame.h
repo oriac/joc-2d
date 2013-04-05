@@ -50,24 +50,25 @@ private:
 	cItem Item[4];
 	cHud Hud;
 	cSound Sound;
+	cData Data;
 	int shootCount;
 	int shootCount2;
 	int enemyShootCount;
-	bool Disparo[100];
-	bool collide;
-	bool collide2;
+	//bool Disparo[100];
+	//bool collide;
+	//bool collide2;
 	bool firstTrap;
 	bool firstPatrol;
 	bool secondPatrol;
-	cData Data;
+	
 	int endTime;
 	int startTime;
 	int loopTime;
 	int endCd, startCd, shootCd;
 	int end2Cd, start2Cd, shoot2Cd;
 	int endECd, startECd, shootECd;
-	//int 
 	int ActualLevel;
 	float red;
 	bool p2IsPlaying;
+	bool gameOverPlayed;
 };

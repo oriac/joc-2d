@@ -80,7 +80,8 @@ void cScene::Draw(int tex_id)
 	glBindTexture(GL_TEXTURE_2D,tex_id);
 	glTranslatef(0., -desplazament, 0.);
 	int px, py;
-	//glCallList(id_DL);
+	//comrpobacion de colosiones
+	//glCallList(id_DL); 
 	//glBindTexture(GL_TEXTURE_2D,tex_id);
 	px=SCENE_Xo;
 	py=SCENE_Yo+((SCENE_HEIGHT/2)*TILE_SIZE);
@@ -109,6 +110,7 @@ void cScene::Draw2(int tex_id)
 	glBindTexture(GL_TEXTURE_2D,tex_id);
 	glTranslatef(0., -desplazament, 0.);
 	int px, py;
+	//comrpobacion de colosiones
 	//glCallList(id_DL);
 	//glBindTexture(GL_TEXTURE_2D,tex_id);
 	px=SCENE_Xo;

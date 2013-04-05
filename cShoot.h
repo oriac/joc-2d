@@ -3,7 +3,7 @@
 #include "cScene.h"
 #include "cPlayer.h"
 
-#define STEP_LENGTH		8
+
 
 class cShoot : public cBicho
 {

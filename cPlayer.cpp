@@ -68,7 +68,7 @@ int cPlayer::GetHp() {
 }
 
 void cPlayer::WinHp() {
-	hp++;
+	if(hp<=9)hp++;
 }
 
 void cPlayer::LoseHp() {
@@ -92,13 +92,6 @@ void cPlayer::Respawn() {
 }
 
 string cPlayer::GetPoints() {
-	/*char aux[10];
-	sprintf(aux,"%d",&points);
-	string s(aux);
-	return s;*/
-	//std::string s = std::to_string(points);
-	//return s;
-	//int a = 10;
 	stringstream ss;
 	ss << points;
 	return ss.str();

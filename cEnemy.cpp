@@ -21,7 +21,7 @@ void cEnemy::Draw(int tex_id)
 
 	switch(GetState())
 	{
-//1
+		//1
 		case STATE_LOOKLEFT:	xo = 0.25f;	yo = 0.5f;
 								break;
 		//4
@@ -141,6 +141,7 @@ int cEnemy::CaulculStep(int x, int y) {
 			}
 			break;
 		}
+	return -1;
 }
 
 int cEnemy::NextStep(int x, int y, int*map) {
@@ -203,10 +204,6 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
 							case 3: collides = cBicho::CollidesTopBot(map,true);
 									break;
 						}
-						/*if ( k == 0) collides = cBicho::CollidesWall(map,false);
-						else if ( k == 1 ) collides = cBicho::CollidesWall(map,true);
-						else if ( k == 2 ) collides = cBicho::CollidesTopBot(map,false);
-						else collides = cBicho::CollidesTopBot(map,true);*/
 						if ( !collides ) {
                             adyacente.x = nx;
                             adyacente.y = ny;
@@ -226,7 +223,6 @@ Estado cEnemy::Logic(int x, int y,int posx, int posy, int * map)
                 }
             }
 			primer = false;
-            //vecinos.pop();
     }
 	cBicho::SetPosition(auxx,auxy);
 	Estado aux;
@@ -243,7 +239,8 @@ int posEx, posEy;
 		else {
 			int tilex, tiley;
 			this->GetTile(&tilex,&tiley);
-			if (PointActual < this->patrulla.size() - 1 && tilex == this->patrulla[PointActual].tilex && tiley == this->patrulla[PointActual].tiley) 
+			int n = this->patrulla.size();
+			if (PointActual < n - 1 && tilex == this->patrulla[PointActual].tilex && tiley == this->patrulla[PointActual].tiley) 
 				this->PointActual++;
 			else if (tilex == this->patrulla[patrulla.size() - 1].tilex && tiley == this->patrulla[patrulla.size() - 1].tiley) 
 				this->PointActual = 0;
